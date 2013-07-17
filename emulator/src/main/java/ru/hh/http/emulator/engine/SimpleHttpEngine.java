@@ -1,6 +1,7 @@
 package ru.hh.http.emulator.engine;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
@@ -23,14 +24,18 @@ public class SimpleHttpEngine implements HttpEngine{
 	public Collection<HttpEntry> process(final Collection<HttpEntry> request) throws AmbiguousRulesException, RuleNotFoundException{
 		
 		Collection<HttpEntry> response = null;
+		HttpEntry responseRule = null;
 		for (HttpEntry httpEntry : request) {
 			final Collection<HttpEntry> responseCandidate = rules.get(httpEntry);
 			if(responseCandidate != null){
 				if(response == null){
 					response = responseCandidate;
+					responseRule = httpEntry;
 				}
 				else{
-					throw new AmbiguousRulesException();
+					throw new AmbiguousRulesException("Rules conflict. Request:" + request 
+							+ "\nmatch two rules:\n" + responseRule 
+							+ "\n and:" + httpEntry);
 				}
 			}
 		}
@@ -39,14 +44,14 @@ public class SimpleHttpEngine implements HttpEngine{
 			return response;
 		}
 		else{
-			throw new RuleNotFoundException();
+			throw new RuleNotFoundException("Rule not found for request:" + request);
 		}
 	}
 
 	@Override
 	public Long addRule(final HttpEntry rule, final Collection<HttpEntry> response) throws AmbiguousRulesException {
 		if(rules.containsKey(rule)){
-			throw new AmbiguousRulesException();
+			throw new AmbiguousRulesException("Rule " + rule + " conflict with:" + rules.get(rule));
 		}
 		
 		rule.setId(sequence.incrementAndGet());
@@ -59,4 +64,28 @@ public class SimpleHttpEngine implements HttpEngine{
 	public Long addRule(final HttpCriteria rule, final Collection<HttpEntry> response) throws AmbiguousRulesException {
 		throw new UnsupportedOperationException();
 	}
+
+	@Override
+	public void deleteRule(Long id) throws RuleNotFoundException {
+		if(id == null || id <= 0){
+			throw new RuleNotFoundException("Rule with id='" + id + "' not found");
+		}
+		
+		for(Iterator<HttpEntry> it = rules.keySet().iterator(); it.hasNext();){
+			if(it.next().getId().equals(id)){
+				it.remove();
+				return;
+			}
+		}
+		
+		throw new RuleNotFoundException("Rule with id='" + id + "' not found");
+	}
+
+	@Override
+	public void deleteAll() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 }

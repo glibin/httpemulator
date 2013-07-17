@@ -31,7 +31,7 @@ import ru.hh.http.emulator.request.CharsetUtils;
 
 
 @Controller
-@RequestMapping("abc")
+@RequestMapping("/**")
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RequestController {
 	
@@ -111,6 +111,7 @@ public class RequestController {
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
 	public void internalFail(Exception e){
+		e.printStackTrace();
 		LOGGER.warn(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e);
 	}
 }

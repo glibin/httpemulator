@@ -30,12 +30,12 @@ public class CriteriaHttpEngine implements HttpEngine {
 					+ "and (c.restrictions.restrictionType = :andType and (:keys) in c.restrictions.httpEntries.key)").uniqueResult();
 			
 			if(criteria == null){
-				throw new RuleNotFoundException();
+				throw new RuleNotFoundException("");
 			}
 			
 			return criteria.getResponse();
 		}catch(NonUniqueResultException nure){
-			throw new AmbiguousRulesException();
+			throw new AmbiguousRulesException("");
 		}
 	}
 
@@ -47,6 +47,18 @@ public class CriteriaHttpEngine implements HttpEngine {
 	@Override
 	public Long addRule(HttpCriteria rule, Collection<HttpEntry> response) throws AmbiguousRulesException {
 		return null;
+	}
+
+	@Override
+	public void deleteRule(Long id) throws RuleNotFoundException {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void deleteAll() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
