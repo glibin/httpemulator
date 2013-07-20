@@ -1,10 +1,7 @@
 package ru.hh.http.emulator;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,12 +20,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import ru.hh.http.emulator.engine.CriteriaHttpEngine;
-import ru.hh.http.emulator.engine.SimpleHttpEngine;
-import ru.hh.http.emulator.entity.AttributeType;
+import ru.hh.http.emulator.engine.ScenarioEngine;
 import ru.hh.http.emulator.entity.HttpEntry;
 import ru.hh.http.emulator.exception.AmbiguousRulesException;
 import ru.hh.http.emulator.exception.RuleNotFoundException;
+import ru.hh.http.emulator.exception.ScenarioNotFoundException;
 import ru.hh.http.emulator.utils.CharsetUtils;
+import ru.hh.http.emulator.utils.HttpUtils;
 
 
 @Controller
@@ -36,45 +34,23 @@ import ru.hh.http.emulator.utils.CharsetUtils;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class RequestController {
 	
-	private final Logger LOGGER = LoggerFactory.getLogger(RequestController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RequestController.class);
+	
+	@Autowired
+	private ScenarioEngine scenarioEngine;
 	
 	@Autowired
 	private CriteriaHttpEngine engine;
 	
-	@RequestMapping(method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE})
+	@RequestMapping(method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE, 
+								RequestMethod.HEAD, RequestMethod.PUT, RequestMethod.OPTIONS, 
+								RequestMethod.PATCH, RequestMethod.TRACE})
 	@ResponseBody
-	public void process(final HttpServletRequest request, final HttpServletResponse response) throws AmbiguousRulesException, RuleNotFoundException, IOException{
-		
-		convertToHttpResponse(response, engine.process(convertToHttpEntries(request)));
+	public void process(final HttpServletRequest request, final HttpServletResponse response) throws AmbiguousRulesException, RuleNotFoundException, IOException, ScenarioNotFoundException{
+		convertToHttpResponse(request, response, engine.process(HttpUtils.convertToHttpEntries(request)));
 	}
 	
-	private Collection<HttpEntry> convertToHttpEntries(final HttpServletRequest request){
-		final Collection<HttpEntry> entries = new ArrayList<HttpEntry>();
-		
-		entries.add(new HttpEntry(AttributeType.PATH, null, request.getPathInfo()));
-		
-		for(Enumeration<String> headerNames = request.getHeaderNames(); headerNames.hasMoreElements();){
-			final String headerName = headerNames.nextElement();
-			
-			for(Enumeration<String> headerValues = request.getHeaders(headerName); headerValues.hasMoreElements();){
-				entries.add(new HttpEntry(AttributeType.HEADER, headerName, headerValues.nextElement()));
-			}
-		}
-		
-		entries.add(new HttpEntry(AttributeType.METHOD, null, request.getMethod()));
-		
-		for (Map.Entry<String, String[]> parameters : request.getParameterMap().entrySet()) {
-			for (String paramValue : parameters.getValue()) {
-				entries.add(new HttpEntry(AttributeType.PARAMETER, parameters.getKey(), paramValue));
-			}
-		}
-		
-		entries.add(new HttpEntry(AttributeType.PROTOCOL, null, request.getProtocol()));
-		
-		return entries;
-	}
-	
-	private void convertToHttpResponse(final HttpServletResponse response, final Collection<HttpEntry> entries) throws IOException{
+	public void convertToHttpResponse(final HttpServletRequest request, final HttpServletResponse response, final Collection<HttpEntry> entries) throws IOException, ScenarioNotFoundException{
 		
 		for (HttpEntry httpEntry : entries) {
 			switch(httpEntry.getType()){
@@ -87,6 +63,8 @@ public class RequestController {
 			case STATUS:
 				response.setStatus(Integer.parseInt(httpEntry.getValue()));
 				break;
+			case SCENARIO:
+				scenarioEngine.executeScenario(httpEntry.getValue(), request, response, entries);
 			default:
 				break;
 			}
@@ -102,7 +80,7 @@ public class RequestController {
 	}
 	
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	@ExceptionHandler(RuleNotFoundException.class)
+	@ExceptionHandler({RuleNotFoundException.class, ScenarioNotFoundException.class})
 	@ResponseBody
 	public void notFound(RuleNotFoundException e){	
 		LOGGER.warn(HttpStatus.NOT_FOUND.toString(), e);

@@ -50,4 +50,14 @@
   
   <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
   
+  <bean id="scenarioEngine" class="ru.hh.http.emulator.engine.ScenarioEngine">
+    <property name="scenaries">
+	    <map>
+	    	<entry key="timeoutScenario">
+	    		<bean class="ru.hh.http.emulator.scenario.TimeoutScenario"/>
+	    	</entry>
+	    </map>
+    </property>
+  </bean>
+  
 </beans>

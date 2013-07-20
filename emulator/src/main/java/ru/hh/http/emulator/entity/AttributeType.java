@@ -14,7 +14,9 @@ public enum AttributeType {
 	
 	STATUS(5),
 	
-	PROTOCOL(6);
+	PROTOCOL(6),
+	
+	SCENARIO(99);
 	
 	private final int type;
 
