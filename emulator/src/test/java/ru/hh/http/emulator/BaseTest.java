@@ -1,14 +1,26 @@
 package ru.hh.http.emulator;
 
+import java.util.Collection;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.eclipse.jetty.client.HttpClient;
+import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.http.HttpMethod;
 import org.junit.After;
 import org.junit.AfterClass;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import ru.hh.http.emulator.entity.HttpEntry;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
 
@@ -42,6 +54,8 @@ public class BaseTest {
 		client = new HttpClient();
 		client.setFollowRedirects(false);
 		client.start();
+		
+		Assert.assertEquals(HttpServletResponse.SC_OK, deleteAll().getStatus());
 	}
 
 	@After
@@ -51,5 +65,28 @@ public class BaseTest {
 	
 	protected Request newRequest(){
 		return client.newRequest("localhost", jettyPort);
+	}
+	
+	protected ContentResponse deleteAll() throws JsonProcessingException, InterruptedException, TimeoutException, ExecutionException{
+		return newRequest()
+		.path("/criteria/all")
+		.method(HttpMethod.DELETE)
+		.send();
+	}
+	
+	protected ContentResponse deleteCriteria(final long id) throws JsonProcessingException, InterruptedException, TimeoutException, ExecutionException{
+		return newRequest()
+		.path("/criteria/" + id)
+		.method(HttpMethod.DELETE)
+		.send();
+	}
+	
+	protected ContentResponse putSimple(final HttpEntry rule, final Collection<HttpEntry> responseEntries) throws JsonProcessingException, InterruptedException, TimeoutException, ExecutionException{
+		return newRequest()
+		.path("/criteria/simple")
+		.method(HttpMethod.PUT)
+		.param("rule", objectMapper.writeValueAsString(rule))
+		.param("response", objectMapper.writeValueAsString(responseEntries))
+		.send();
 	}
 }

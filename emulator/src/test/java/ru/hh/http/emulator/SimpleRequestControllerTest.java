@@ -1,8 +1,7 @@
 package ru.hh.http.emulator;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Arrays;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -24,25 +23,14 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 
 public class SimpleRequestControllerTest extends BaseTest{
 	
-	private static final String SIMPLE_PATH = "/criteria/simple";
-	
 	@Test
     public void putSimpleRuleTest() throws JsonParseException, JsonMappingException, JsonProcessingException, IOException, AmbiguousRulesException, InterruptedException, TimeoutException, ExecutionException{
 		
-		final Collection<HttpEntry> responseEntries = new ArrayList<HttpEntry>(1);
-		responseEntries.add(new HttpEntry(AttributeType.STATUS, null, "123"));
-		
-		final ContentResponse criteriaResponse = newRequest()
-			.path(SIMPLE_PATH)
-			.method(HttpMethod.PUT)
-			.param("rule", objectMapper.writeValueAsString(new HttpEntry(AttributeType.PARAMETER, "param1", "value1")))
-			.param("response", objectMapper.writeValueAsString(responseEntries))
-			.send();
-		
+		final ContentResponse criteriaResponse = putSimple(new HttpEntry(AttributeType.PARAMETER, "param1", "value1"), Arrays.asList(new HttpEntry(AttributeType.STATUS, null, "123")));
 		Assert.assertEquals(HttpServletResponse.SC_OK, criteriaResponse.getStatus());
 		
 		final long id = Long.parseLong(new String(criteriaResponse.getContent()));
-		Assert.assertTrue(id > 0);
+		Assert.assertTrue(id >= 0);
 		
 		final ContentResponse response = newRequest()
 				.path("/abc/def")
@@ -53,5 +41,52 @@ public class SimpleRequestControllerTest extends BaseTest{
 		Assert.assertEquals(123, response.getStatus());
     }
 	
+	@Test
+    public void requestWithNotExistentRuleTest() throws InterruptedException, TimeoutException, ExecutionException{
+		
+		final ContentResponse response = newRequest()
+				.path("/abc/def")
+				.method(HttpMethod.GET)
+				.param("param1", "value1")
+				.send();
+		
+		Assert.assertEquals(404, response.getStatus());
+    }
 	
+	@Test
+    public void requestWithAmbiguousRuleTest() throws JsonParseException, JsonMappingException, JsonProcessingException, IOException, AmbiguousRulesException, InterruptedException, TimeoutException, ExecutionException{
+		
+		ContentResponse criteriaResponse = putSimple(new HttpEntry(AttributeType.PARAMETER, "param1", "value1"), Arrays.asList(new HttpEntry(AttributeType.STATUS, null, "123")));
+		Assert.assertEquals(HttpServletResponse.SC_OK, criteriaResponse.getStatus());
+		criteriaResponse = putSimple(new HttpEntry(AttributeType.PARAMETER, "param2", "value2"), Arrays.asList(new HttpEntry(AttributeType.STATUS, null, "321")));
+		Assert.assertEquals(HttpServletResponse.SC_OK, criteriaResponse.getStatus());
+		
+		final ContentResponse response = newRequest()
+				.path("/abc/def")
+				.method(HttpMethod.GET)
+				.param("param1", "value1")
+				.param("param2", "value2")
+				.send();
+		
+		Assert.assertEquals(HttpServletResponse.SC_CONFLICT, response.getStatus());
+    }
+	
+	@Test
+    public void deleteRuleTest() throws JsonParseException, JsonMappingException, JsonProcessingException, IOException, AmbiguousRulesException, InterruptedException, TimeoutException, ExecutionException{
+		
+		ContentResponse criteriaResponse = putSimple(new HttpEntry(AttributeType.PARAMETER, "param1", "value1"), Arrays.asList(new HttpEntry(AttributeType.STATUS, null, "123")));
+		Assert.assertEquals(HttpServletResponse.SC_OK, criteriaResponse.getStatus());
+		
+		final long id = Long.parseLong(new String(criteriaResponse.getContent()));
+		criteriaResponse = deleteCriteria(id);
+		Assert.assertEquals(HttpServletResponse.SC_OK, criteriaResponse.getStatus());
+		
+		final ContentResponse response = newRequest()
+				.path("/abc/def")
+				.method(HttpMethod.GET)
+				.param("param1", "value1")
+				.send();
+		
+		Assert.assertEquals(HttpServletResponse.SC_NOT_FOUND, response.getStatus());
+    }
 }

@@ -15,9 +15,9 @@ public class JettyServer {
 	
 	public int start() throws Exception {
         
-        WebAppContext context = new WebAppContext();
-        context.setDescriptor("D:\\java\\workspace_http\\emulator\\src\\main\\webapp\\WEB-INF\\web.xml");
-        context.setResourceBase("D:\\java\\workspace_http\\emulator\\src\\main\\webapp");
+        final WebAppContext context = new WebAppContext();
+        context.setDescriptor("WEB-INF\\web.xml");
+        context.setResourceBase("src\\main\\webapp");
         context.setContextPath("/");
         context.setParentLoaderPriority(true);
  

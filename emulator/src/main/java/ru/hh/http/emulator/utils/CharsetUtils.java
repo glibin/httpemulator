@@ -1,4 +1,4 @@
-package ru.hh.http.emulator.request;
+package ru.hh.http.emulator.utils;
 
 import java.nio.charset.Charset;
 

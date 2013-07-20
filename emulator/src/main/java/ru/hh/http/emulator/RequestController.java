@@ -22,12 +22,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import ru.hh.http.emulator.engine.CriteriaHttpEngine;
 import ru.hh.http.emulator.engine.SimpleHttpEngine;
 import ru.hh.http.emulator.entity.AttributeType;
 import ru.hh.http.emulator.entity.HttpEntry;
 import ru.hh.http.emulator.exception.AmbiguousRulesException;
 import ru.hh.http.emulator.exception.RuleNotFoundException;
-import ru.hh.http.emulator.request.CharsetUtils;
+import ru.hh.http.emulator.utils.CharsetUtils;
 
 
 @Controller
@@ -38,9 +39,9 @@ public class RequestController {
 	private final Logger LOGGER = LoggerFactory.getLogger(RequestController.class);
 	
 	@Autowired
-	private SimpleHttpEngine engine;
+	private CriteriaHttpEngine engine;
 	
-	@RequestMapping(method = {RequestMethod.GET, RequestMethod.POST})
+	@RequestMapping(method = {RequestMethod.GET, RequestMethod.POST, RequestMethod.DELETE})
 	@ResponseBody
 	public void process(final HttpServletRequest request, final HttpServletResponse response) throws AmbiguousRulesException, RuleNotFoundException, IOException{
 		
@@ -92,11 +93,11 @@ public class RequestController {
 		}
 	}
 	
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ResponseStatus(HttpStatus.CONFLICT)
 	@ExceptionHandler({AmbiguousRulesException.class})
 	@ResponseBody
 	public String badRequest(AmbiguousRulesException e){
-		LOGGER.warn(HttpStatus.BAD_REQUEST.toString(), e);
+		LOGGER.warn(HttpStatus.CONFLICT.toString(), e);
 		return e.getMessage();
 	}
 	
@@ -110,8 +111,8 @@ public class RequestController {
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
-	public void internalFail(Exception e){
-		e.printStackTrace();
+	public String internalFail(Exception e){
 		LOGGER.warn(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e);
+		return e.getMessage();
 	}
 }

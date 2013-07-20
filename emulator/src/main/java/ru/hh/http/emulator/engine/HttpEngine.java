@@ -13,7 +13,7 @@ public interface HttpEngine {
 	
 	public Long addRule(HttpEntry rule, Collection<HttpEntry> response) throws AmbiguousRulesException;
 	
-	public Long addRule(HttpCriteria rule, Collection<HttpEntry> response) throws AmbiguousRulesException;
+	public Long addRule(HttpCriteria rule) throws AmbiguousRulesException;
 	
 	public void deleteRule(Long id) throws RuleNotFoundException;
 	

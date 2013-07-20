@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import ru.hh.http.emulator.engine.CriteriaHttpEngine;
 import ru.hh.http.emulator.engine.SimpleHttpEngine;
 import ru.hh.http.emulator.entity.HttpEntry;
 import ru.hh.http.emulator.exception.AmbiguousRulesException;
@@ -41,7 +42,7 @@ public class CriteriaController {
 	private ObjectMapper objectMapper;
 	
 	@Autowired
-	private SimpleHttpEngine engine;
+	private CriteriaHttpEngine engine;
 	
 	@PostConstruct
 	public void postConstruct(){
@@ -55,21 +56,32 @@ public class CriteriaController {
 		return ""+engine.addRule(objectMapper.readValue(httpEntry, HttpEntry.class), (Collection<HttpEntry>)objectMapper.readValue(response, objectMapper.getTypeFactory().constructCollectionType(Collection.class, HttpEntry.class)));
 	}
 	
-	@RequestMapping(value = "{id}", method = RequestMethod.DELETE, produces = {"text/plain"})
+	@RequestMapping(value = "{id:[0-9]+}", method = RequestMethod.DELETE)
+	@ResponseBody
 	public void deleteCriteria(@PathVariable("id") final Long id) throws JsonParseException, JsonMappingException, IOException, AmbiguousRulesException, RuleNotFoundException{
 		engine.deleteRule(id);
 	}
 	
-	@RequestMapping(value = "all", method = RequestMethod.DELETE, produces = {"text/plain"})
+	@RequestMapping(value = "all", method = RequestMethod.DELETE)
+	@ResponseBody
 	public void deleteAllCriteria() throws JsonParseException, JsonMappingException, IOException, AmbiguousRulesException{
 		engine.deleteAll();
+	}
+	
+	@ResponseStatus(HttpStatus.CONFLICT)
+	@ExceptionHandler({AmbiguousRulesException.class})
+	@ResponseBody
+	public String badRequest(AmbiguousRulesException e){
+		LOGGER.warn(HttpStatus.CONFLICT.toString(), e);
+		return e.getMessage();
 	}
 	
 	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
-	public void internalFail(Exception e){
+	public String internalFail(Exception e){
 		e.printStackTrace();
 		LOGGER.warn(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e);
+		return e.getMessage();
 	}
 }

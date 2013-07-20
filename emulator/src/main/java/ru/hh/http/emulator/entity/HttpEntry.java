@@ -97,7 +97,12 @@ public class HttpEntry {
 			return false;
 		return true;
 	}
-	
-	
+
+
+	@Override
+	public String toString() {
+		return "HttpEntry [id=" + id + ", type=" + type + ", key=" + key
+				+ ", value=" + value + "]";
+	}
 	
 }

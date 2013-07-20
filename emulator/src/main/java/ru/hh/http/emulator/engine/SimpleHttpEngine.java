@@ -61,13 +61,13 @@ public class SimpleHttpEngine implements HttpEngine{
 	}
 
 	@Override
-	public Long addRule(final HttpCriteria rule, final Collection<HttpEntry> response) throws AmbiguousRulesException {
+	public Long addRule(final HttpCriteria rule) throws AmbiguousRulesException {
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
 	public void deleteRule(Long id) throws RuleNotFoundException {
-		if(id == null || id <= 0){
+		if(id == null){
 			throw new RuleNotFoundException("Rule with id='" + id + "' not found");
 		}
 		
@@ -83,8 +83,7 @@ public class SimpleHttpEngine implements HttpEngine{
 
 	@Override
 	public void deleteAll() {
-		// TODO Auto-generated method stub
-		
+		rules.clear();
 	}
 	
 	
