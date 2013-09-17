@@ -100,12 +100,12 @@
         <version>9.0.4.v20130625</version>
         <scope>test</scope>
       </dependency>
-<dependency>
-	<groupId>org.eclipse.jetty</groupId>
-	<artifactId>jetty-client</artifactId>
-	<version>9.0.4.v20130625</version>
-	<scope>test</scope>
-</dependency>
+      <dependency>
+	    <groupId>org.eclipse.jetty</groupId>
+	    <artifactId>jetty-client</artifactId>
+	    <version>9.0.4.v20130625</version>
+	    <scope>test</scope>
+      </dependency>
   </dependencies>
   
   <build>
@@ -121,12 +121,13 @@
         </plugin>
         
         <plugin>
-	        <groupId>org.mortbay.jetty</groupId>
-	        <artifactId>maven-jetty-plugin</artifactId>
+	        <groupId>org.eclipse.jetty</groupId>
+	        <artifactId>jetty-maven-plugin</artifactId>
+	        <version>9.0.4.v20130625</version>
 	        <configuration>
-	                <scanIntervalSeconds>10</scanIntervalSeconds>
-	                <stopKey>foo</stopKey>
-	                <stopPort>9999</stopPort>
+	            <scanIntervalSeconds>10</scanIntervalSeconds>
+	            <stopKey>foo</stopKey>
+	            <stopPort>9999</stopPort>
 	        </configuration>
 	    </plugin>
     </plugins>
