@@ -2,11 +2,9 @@ package ru.hh.http.emulator;
 
 import java.io.IOException;
 import java.util.Collection;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
 import ru.hh.http.emulator.client.entity.HttpEntry;
 import ru.hh.http.emulator.engine.CriteriaHttpEngine;
 import ru.hh.http.emulator.engine.ScenarioEngine;

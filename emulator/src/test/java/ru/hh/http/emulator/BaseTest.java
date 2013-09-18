@@ -3,13 +3,10 @@ package ru.hh.http.emulator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
-
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-
 import javax.servlet.http.HttpServletResponse;
-
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
@@ -21,7 +18,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import ru.hh.http.emulator.client.entity.HttpEntry;
 
 public class BaseTest {
@@ -31,9 +27,9 @@ public class BaseTest {
 
   protected static int jettyPort;
 
-  protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
+  protected static HttpClient client = new HttpClient();
 
-  protected HttpClient client;
+  protected final Logger LOGGER = LoggerFactory.getLogger(this.getClass());
 
   @BeforeClass
   public static void beforeClass() throws Exception {
@@ -41,26 +37,24 @@ public class BaseTest {
 
     jetty = new JettyServer();
     jettyPort = jetty.start();
+
+    client.setFollowRedirects(false);
+    client.start();
   }
 
   @AfterClass
   public static void afterClass() throws Exception {
+    client.stop();
     jetty.stop();
   }
 
   @Before
   public void beforeTestMethod() throws Exception {
-    client = new HttpClient();
-    client.setFollowRedirects(false);
-    client.start();
-
     Assert.assertEquals(HttpServletResponse.SC_OK, deleteAll().getStatus());
   }
 
   @After
-  public void afterTestMethod() throws Exception {
-    client.stop();
-  }
+  public void afterTestMethod() throws Exception { }
 
   protected Request newRequest() {
     return client.newRequest("localhost", jettyPort);

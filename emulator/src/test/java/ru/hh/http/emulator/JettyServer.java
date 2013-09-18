@@ -1,11 +1,12 @@
 package ru.hh.http.emulator;
 
+import java.io.File;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public class JettyServer {
-  private static final AtomicInteger PORT = new AtomicInteger(9090);
+  private static final AtomicInteger PORT = new AtomicInteger(19090);
 
   private final int serverPort = PORT.incrementAndGet();
 
@@ -13,8 +14,8 @@ public class JettyServer {
 
   public int start() throws Exception {
     final WebAppContext context = new WebAppContext();
-    context.setDescriptor("WEB-INF\\web.xml");
-    context.setResourceBase("src\\main\\webapp");
+    context.setDescriptor("WEB-INF" + File.separator + "web.xml");
+    context.setResourceBase("src" + File.separator + "main" + File.separator + "webapp");
     context.setContextPath("/");
     context.setParentLoaderPriority(true);
 
