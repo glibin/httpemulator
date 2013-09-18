@@ -3,10 +3,13 @@ package ru.hh.http.emulator;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
+
 import java.util.Collection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
+
 import javax.servlet.http.HttpServletResponse;
+
 import org.eclipse.jetty.client.HttpClient;
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
@@ -18,7 +21,8 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import ru.hh.http.emulator.entity.HttpEntry;
+
+import ru.hh.http.emulator.client.entity.HttpEntry;
 
 public class BaseTest {
   protected static final ObjectMapper objectMapper = new ObjectMapper();

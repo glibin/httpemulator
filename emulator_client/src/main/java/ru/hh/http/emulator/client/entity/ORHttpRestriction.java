@@ -1,4 +1,4 @@
-package ru.hh.http.emulator.entity;
+package ru.hh.http.emulator.client.entity;
 
 import java.util.Collection;
 import java.util.HashSet;

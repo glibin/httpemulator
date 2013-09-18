@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import ru.hh.http.emulator.entity.AttributeType;
-import ru.hh.http.emulator.entity.HttpEntry;
+
+import ru.hh.http.emulator.client.entity.AttributeType;
+import ru.hh.http.emulator.client.entity.HttpEntry;
 
 public class HttpUtils {
   public static Collection<HttpEntry> convertToHttpEntries(final HttpServletRequest request) {

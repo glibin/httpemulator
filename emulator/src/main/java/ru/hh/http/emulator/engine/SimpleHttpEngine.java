@@ -8,8 +8,8 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Component;
 
-import ru.hh.http.emulator.entity.HttpCriteria;
-import ru.hh.http.emulator.entity.HttpEntry;
+import ru.hh.http.emulator.client.entity.HttpCriteria;
+import ru.hh.http.emulator.client.entity.HttpEntry;
 import ru.hh.http.emulator.exception.AmbiguousRulesException;
 import ru.hh.http.emulator.exception.RuleNotFoundException;
 

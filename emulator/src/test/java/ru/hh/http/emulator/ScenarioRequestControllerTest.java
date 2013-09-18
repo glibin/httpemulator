@@ -13,8 +13,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.springframework.util.StopWatch;
 
-import ru.hh.http.emulator.entity.AttributeType;
-import ru.hh.http.emulator.entity.HttpEntry;
+import ru.hh.http.emulator.client.entity.AttributeType;
+import ru.hh.http.emulator.client.entity.HttpEntry;
 import ru.hh.http.emulator.exception.AmbiguousRulesException;
 
 import com.fasterxml.jackson.core.JsonParseException;

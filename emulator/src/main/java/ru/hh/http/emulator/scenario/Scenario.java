@@ -5,7 +5,7 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ru.hh.http.emulator.entity.HttpEntry;
+import ru.hh.http.emulator.client.entity.HttpEntry;
 
 public interface Scenario {
 

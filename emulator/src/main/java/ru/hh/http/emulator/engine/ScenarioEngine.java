@@ -9,7 +9,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Component;
 
-import ru.hh.http.emulator.entity.HttpEntry;
+import ru.hh.http.emulator.client.entity.HttpEntry;
 import ru.hh.http.emulator.exception.ScenarioNotFoundException;
 import ru.hh.http.emulator.scenario.Scenario;
 

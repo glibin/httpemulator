@@ -20,9 +20,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import ru.hh.http.emulator.client.entity.HttpEntry;
 import ru.hh.http.emulator.engine.CriteriaHttpEngine;
 import ru.hh.http.emulator.engine.SimpleHttpEngine;
-import ru.hh.http.emulator.entity.HttpEntry;
 import ru.hh.http.emulator.exception.AmbiguousRulesException;
 import ru.hh.http.emulator.exception.RuleNotFoundException;
 

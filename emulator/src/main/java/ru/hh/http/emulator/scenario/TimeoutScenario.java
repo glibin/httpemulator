@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
 
 import ru.hh.http.emulator.RequestController;
-import ru.hh.http.emulator.entity.AttributeType;
-import ru.hh.http.emulator.entity.HttpEntry;
+import ru.hh.http.emulator.client.entity.AttributeType;
+import ru.hh.http.emulator.client.entity.HttpEntry;
 
 public class TimeoutScenario implements Scenario {
 
