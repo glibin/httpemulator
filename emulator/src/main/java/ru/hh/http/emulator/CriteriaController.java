@@ -4,9 +4,12 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.hibernate4.Hibernate4Module;
+
 import java.io.IOException;
 import java.util.Collection;
+
 import javax.annotation.PostConstruct;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+
+import ru.hh.http.emulator.client.entity.HttpCriteria;
 import ru.hh.http.emulator.client.entity.HttpEntry;
 import ru.hh.http.emulator.engine.CriteriaHttpEngine;
 import ru.hh.http.emulator.exception.AmbiguousRulesException;
@@ -45,13 +50,21 @@ public class CriteriaController {
 
   @RequestMapping(value = "simple", method = RequestMethod.PUT, produces = { "text/plain" })
   @ResponseBody
-  public String createCriteria(@RequestParam("rule") final String httpEntry,
+  public String createSimpleCriteria(@RequestParam("rule") final String httpEntry,
       @RequestParam("response") final String response) throws JsonParseException, JsonMappingException, IOException, AmbiguousRulesException {
     return ""
     + engine.addRule(
       objectMapper.readValue(httpEntry, HttpEntry.class),
       (Collection<HttpEntry>) objectMapper.readValue(
         response, objectMapper.getTypeFactory().constructCollectionType(Collection.class, HttpEntry.class)));
+  }
+  
+  @RequestMapping(value = "full", method = RequestMethod.PUT, produces = { "text/plain" })
+  @ResponseBody
+  public String createCriteria(@RequestParam("criteria") final String criteria,
+      @RequestParam("response") final String response) throws JsonParseException, JsonMappingException, IOException, AmbiguousRulesException {
+    return "" + engine.addRule(objectMapper.readValue(criteria, HttpCriteria.class), 
+    							(Collection<HttpEntry>) objectMapper.readValue(response, objectMapper.getTypeFactory().constructCollectionType(Collection.class, HttpEntry.class)));
   }
 
   @RequestMapping(value = "{id:[0-9]+}", method = RequestMethod.DELETE)

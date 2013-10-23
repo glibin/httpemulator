@@ -61,7 +61,7 @@ public class SimpleHttpEngine implements HttpEngine{
 	}
 
 	@Override
-	public Long addRule(final HttpCriteria rule) throws AmbiguousRulesException {
+	public Long addRule(final HttpCriteria criteria, final Collection<HttpEntry> response) throws AmbiguousRulesException {
 		throw new UnsupportedOperationException();
 	}
 

@@ -3,13 +3,10 @@ package ru.hh.http.emulator.engine;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.atomic.AtomicLong;
 
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import ru.hh.http.emulator.client.entity.EQHttpRestriction;
 import ru.hh.http.emulator.client.entity.HttpCriteria;
@@ -22,21 +19,21 @@ public class CriteriaHttpEngine implements HttpEngine {
 
 	private final AtomicLong sequence = new AtomicLong();
 	
-	private final Map<HttpCriteria, Object> criterias = new ConcurrentHashMap<HttpCriteria, Object>();
+	private final Map<HttpCriteria, Collection<HttpEntry>> criterias = new ConcurrentHashMap<HttpCriteria, Collection<HttpEntry>>();
 	
 	@Override
 	public Collection<HttpEntry> process(final Collection<HttpEntry> request) throws AmbiguousRulesException, RuleNotFoundException {
 		
-		HttpCriteria result = null;
-		for (HttpCriteria httpCriteria : criterias.keySet()) {
-			if(httpCriteria.match(request)){
+		Map.Entry<HttpCriteria, Collection<HttpEntry>> result = null;
+		for (Map.Entry<HttpCriteria, Collection<HttpEntry>> entry : criterias.entrySet()) {
+			if(entry.getKey().match(request)){
 				if(result == null){
-					result = httpCriteria;
+					result = entry;
 				}
 				else{
 					throw new AmbiguousRulesException("Rules conflict. Request:" + request 
 							+ "\nmatch two rules:\n" + result 
-							+ "\n and:" + httpCriteria);
+							+ "\n and:" + entry);
 				}
 			}
 		}
@@ -45,46 +42,27 @@ public class CriteriaHttpEngine implements HttpEngine {
 			throw new RuleNotFoundException("Rule not found for request:" + request);
 		}
 		
-		return result.getResponse();
-		
-		/*try{
-			final HttpCriteria criteria = (HttpCriteria) factory.getCurrentSession().createQuery("from HttpCriteria c "
-					+ "where (c.restrictions.restrictionType in (:inType, : orType) and c.restrictions.httpEntries.key in (:keys)) "
-					+ "and (c.restrictions.restrictionType = :notInType and c.restrictions.httpEntries.key not in (:keys))"
-					+ "and (c.restrictions.restrictionType = :andType and (:keys) in c.restrictions.httpEntries.key)").uniqueResult();
-			
-			if(criteria == null){
-				throw new RuleNotFoundException("");
-			}
-			
-			String query = "select * from http_criteria c where exists "
-					+ "(select * from http_restriction r connect by r.id root r.id=c.id "
-					+ "and ())";
-			
-			
-			return criteria.getResponse();
-		}catch(NonUniqueResultException nure){
-			throw new AmbiguousRulesException("");
-		}*/
+		return result.getValue();
 	}
 
 	@Override
-	public Long addRule(HttpEntry rule, Collection<HttpEntry> response) throws AmbiguousRulesException {
-		return addRule(new HttpCriteria(response)
-							.addRestriction(new EQHttpRestriction(rule.getKey(), rule.getValue(), rule.getType())));
+	public Long addRule(HttpEntry criteria, Collection<HttpEntry> response) throws AmbiguousRulesException {
+		return addRule(new HttpCriteria()
+								.addRestriction(new EQHttpRestriction(criteria.getKey(), criteria.getValue(), criteria.getType())), 
+						response);
 	}
 
 	@Override
-	public Long addRule(final HttpCriteria rule) throws AmbiguousRulesException {
+	public Long addRule(final HttpCriteria criteria, final Collection<HttpEntry> response) throws AmbiguousRulesException {
 		
-		if(criterias.containsKey(rule)){
-			throw new AmbiguousRulesException("Rule " + rule + " conflict with another:" + criterias);
+		if(criterias.containsKey(criteria)){
+			throw new AmbiguousRulesException("Rule " + criteria + " conflict with another:" + criterias);
 		}
 		
-		rule.setId(sequence.incrementAndGet());
-		criterias.put(rule, rule.getResponse());
+		criteria.setId(sequence.incrementAndGet());
+		criterias.put(criteria, response);
 		
-		return rule.getId();
+		return criteria.getId();
 	}
 
 	@Override

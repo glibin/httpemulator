@@ -11,9 +11,9 @@ public interface HttpEngine {
 
 	public Collection<HttpEntry> process(Collection<HttpEntry> request) throws AmbiguousRulesException, RuleNotFoundException;
 	
-	public Long addRule(HttpEntry rule, Collection<HttpEntry> response) throws AmbiguousRulesException;
+	public Long addRule(HttpEntry criteria, Collection<HttpEntry> response) throws AmbiguousRulesException;
 	
-	public Long addRule(HttpCriteria rule) throws AmbiguousRulesException;
+	public Long addRule(HttpCriteria criteria, Collection<HttpEntry> response) throws AmbiguousRulesException;
 	
 	public void deleteRule(Long id) throws RuleNotFoundException;
 	

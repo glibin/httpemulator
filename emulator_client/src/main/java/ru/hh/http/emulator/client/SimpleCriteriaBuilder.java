@@ -1,38 +1,41 @@
 package ru.hh.http.emulator.client;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import org.eclipse.jetty.client.api.ContentResponse;
+
 import ru.hh.http.emulator.client.entity.AttributeType;
 import ru.hh.http.emulator.client.entity.HttpEntry;
+import ru.hh.http.emulator.client.entity.HttpRestriction;
 
-public class SimpleCriteriaBuilder extends CriteriaBuilder {
-  private final Collection<HttpEntry> result = new ArrayList<HttpEntry>();
-
+public class SimpleCriteriaBuilder extends CriteriaBuilder<SimpleCriteriaBuilder> {
+	
   private HttpEntry rule;
 
-  private final EmulatorClient client;
-
   public SimpleCriteriaBuilder(final EmulatorClient client) {
-    this.client = client;
+    super(client);
   }
 
-  public SimpleCriteriaBuilder setRule(final AttributeType type, final String key, final String value) {
+  @Override
+  public SimpleCriteriaBuilder addEQ(final AttributeType type, final String key, final String value) {
+	if(rule != null){
+		throw new IllegalStateException("Simple builder allow only one restriction");
+	}
     rule = new HttpEntry(type, key, value);
     return this;
   }
 
-  public SimpleCriteriaBuilder addResponseEntry(final AttributeType type, final String key, final String value) {
-    result.add(new HttpEntry(type, key, value));
-    return this;
+  @Override
+  public SimpleCriteriaBuilder add(final HttpRestriction restriction) {
+	rule = new HttpEntry(restriction.getAttribyteType(), restriction.getKey(), restriction.getValue());
+	return this;
+  }
+  
+  @Override
+  protected ContentResponse sendRequest() throws Exception {
+	return getClient().putSimple(rule, getResult());
   }
 
-  public long save() throws Exception {
-    final ContentResponse response = client.putSimple(rule, result);
-    if (response.getStatus() == 200) {
-      return Long.parseLong(response.getContentAsString());
-    }
-
-    throw new IllegalStateException("HTTP status code = " + response.getStatus());
+  @Override
+  protected SimpleCriteriaBuilder self() {
+	return this;
   }
 }
