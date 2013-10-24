@@ -8,22 +8,7 @@ public class HttpCriteria {
 
   private Collection<HttpRestriction> restrictions;
 
-  //private Collection<HttpEntry> response;
-
   public HttpCriteria() { }
-
-  /*public HttpCriteria(Collection<HttpEntry> response) {
-    this.response = response;
-  }
-
-  public Collection<HttpEntry> getResponse() {
-    return response;
-  }
-
-  public HttpCriteria setResponse(Collection<HttpEntry> response) {
-    this.response = response;
-    return this;
-  }*/
 
   public Collection<HttpRestriction> getRestrictions() {
     if (restrictions == null) {

@@ -36,7 +36,7 @@ public class RequestController {
   private ScenarioEngine scenarioEngine;
 
   @Autowired
-  private CriteriaHttpEngine engine;
+  private CriteriaHttpEngine criteriaEngine;
 
   @RequestMapping(
     method =
@@ -48,7 +48,7 @@ public class RequestController {
   @ResponseBody
   public void process(final HttpServletRequest request, final HttpServletResponse response) throws AmbiguousRulesException, RuleNotFoundException,
     IOException, ScenarioNotFoundException {
-    convertToHttpResponse(request, response, engine.process(HttpUtils.convertToHttpEntries(request)));
+    convertToHttpResponse(request, response, criteriaEngine.process(HttpUtils.convertToHttpEntries(request)));
   }
 
   public void convertToHttpResponse(final HttpServletRequest request, final HttpServletResponse response, final Collection<HttpEntry> entries)
