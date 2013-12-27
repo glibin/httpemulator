@@ -3,7 +3,7 @@ package ru.hh.http.emulator.client.entity;
 public class HttpEntry {
   private Long id;
 
-  private HttpRestriction restriction;
+  // private HttpRestriction restriction;
 
   private AttributeType type;
 
@@ -51,13 +51,13 @@ public class HttpEntry {
     this.id = id;
   }
 
-  public HttpRestriction getRestriction() {
+  /*public HttpRestriction getRestriction() {
     return restriction;
   }
 
   public void setRestriction(HttpRestriction restriction) {
     this.restriction = restriction;
-  }
+  }*/
 
   @Override
   public int hashCode() {
@@ -103,7 +103,7 @@ public class HttpEntry {
 
   @Override
   public String toString() {
-    return "HttpEntry [id=" + id + ", type=" + type + ", key=" + key
-    + ", value=" + value + "]";
+    return "HttpEntry [id=" + id + ", type=" + type + ", " + key
+    + ": " + value + "]";
   }
 }

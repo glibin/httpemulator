@@ -4,14 +4,21 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Map;
-
+import java.util.concurrent.atomic.AtomicLong;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-
 import ru.hh.http.emulator.client.entity.AttributeType;
 import ru.hh.http.emulator.client.entity.HttpEntry;
 
 public class HttpUtils {
+  private static final AtomicLong REQUEST_COUNTER = new AtomicLong(0);
+
+  public static final String REQUEST_ID_PARAM_NAME = "REQUEST_ID";
+
+  public static long nextRequestId() {
+    return REQUEST_COUNTER.incrementAndGet();
+  }
+
   public static Collection<HttpEntry> convertToHttpEntries(final HttpServletRequest request) {
     final Collection<HttpEntry> entries = new ArrayList<HttpEntry>();
 

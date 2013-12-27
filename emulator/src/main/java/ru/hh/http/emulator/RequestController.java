@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import ru.hh.http.emulator.client.entity.HttpEntry;
 import ru.hh.http.emulator.engine.CriteriaHttpEngine;
 import ru.hh.http.emulator.engine.ScenarioEngine;
@@ -48,7 +51,42 @@ public class RequestController {
   @ResponseBody
   public void process(final HttpServletRequest request, final HttpServletResponse response) throws AmbiguousRulesException, RuleNotFoundException,
     IOException, ScenarioNotFoundException {
-    convertToHttpResponse(request, response, criteriaEngine.process(HttpUtils.convertToHttpEntries(request)));
+    final long requestId = getRequestId(request);
+
+    final Collection<HttpEntry> requestEntries = HttpUtils.convertToHttpEntries(request);
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("EMULATOR REQUEST. id=" + requestId + "\n" + requestEntries);
+    }
+
+    final Collection<HttpEntry> responseEntries = criteriaEngine.process(requestEntries);
+    convertToHttpResponse(request, response, responseEntries);
+
+    if (LOGGER.isDebugEnabled()) {
+      LOGGER.debug("EMULATOR RESPONSE. id=" + requestId + "\n" + responseEntries);
+    }
+  }
+
+  private long getRequestId(final HttpServletRequest request) {
+    RequestAttributes attr = RequestContextHolder.getRequestAttributes();
+    if (attr == null) {
+      if (request == null) {
+        return -1;
+      }
+      attr = new ServletRequestAttributes(request);
+      RequestContextHolder.setRequestAttributes(attr);
+    }
+
+    Long requestId = (Long) attr.getAttribute(HttpUtils.REQUEST_ID_PARAM_NAME, ServletRequestAttributes.SCOPE_REQUEST);
+    if (requestId == null) {
+      requestId = HttpUtils.nextRequestId();
+      attr.setAttribute(HttpUtils.REQUEST_ID_PARAM_NAME, requestId, ServletRequestAttributes.SCOPE_REQUEST);
+    }
+
+    return requestId;
+  }
+
+  private long getRequestId() {
+    return getRequestId(null);
   }
 
   public void convertToHttpResponse(final HttpServletRequest request, final HttpServletResponse response, final Collection<HttpEntry> entries)
@@ -79,7 +117,7 @@ public class RequestController {
   @ResponseBody
   @ResponseStatus(HttpStatus.CONFLICT)
   public String badRequest(AmbiguousRulesException e) {
-    LOGGER.warn(HttpStatus.CONFLICT.toString(), e);
+    LOGGER.warn("EMULATOR RESPONSE. id=" + getRequestId() + ", status=" + HttpStatus.CONFLICT, e);
     return e.getMessage();
   }
 
@@ -87,14 +125,14 @@ public class RequestController {
   @ResponseBody
   @ResponseStatus(HttpStatus.NOT_FOUND)
   public void notFound(RuleNotFoundException e) {
-    LOGGER.warn(HttpStatus.NOT_FOUND.toString(), e);
+    LOGGER.warn("EMULATOR RESPONSE. id=" + getRequestId() + ", status=" + HttpStatus.NOT_FOUND, e);
   }
 
   @ExceptionHandler(Exception.class)
   @ResponseBody
   @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
   public String internalFail(Exception e) {
-    LOGGER.warn(HttpStatus.INTERNAL_SERVER_ERROR.toString(), e);
+    LOGGER.warn("EMULATOR RESPONSE. id=" + getRequestId() + ", status=" + HttpStatus.INTERNAL_SERVER_ERROR, e);
     return e.getMessage();
   }
 }
