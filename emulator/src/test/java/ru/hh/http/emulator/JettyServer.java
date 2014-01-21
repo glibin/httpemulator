@@ -6,7 +6,7 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 
 public class JettyServer {
-  private static final AtomicInteger PORT = new AtomicInteger(19090);
+  private static final AtomicInteger PORT = new AtomicInteger(19080);
 
   private final int serverPort = PORT.incrementAndGet();
 
