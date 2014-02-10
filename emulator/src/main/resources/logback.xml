@@ -2,7 +2,7 @@
 <configuration>
 
 	<appender name="FILE" class="ch.qos.logback.core.FileAppender">
-	    <file>logs/spring-example.log</file>
+	    <file>logs/http_emulator.log</file>
 	    <encoder>
 	      <pattern>%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
 	    </encoder>
