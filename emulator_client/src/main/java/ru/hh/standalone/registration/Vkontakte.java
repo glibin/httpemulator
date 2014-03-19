@@ -42,7 +42,7 @@ public class Vkontakte {
 
     vkontakt.authorizationVkUser(vkontakt.vkUserId, vkontakt.testHost);  // авторизуемся через вконтакт (проставляем куку, формируем данные VK юзера и эмулуриуем авторизацию цепочкой запросов)
 
-
+    System.out.println("Exiting");
   }
 
   public static String getNumber(int length) {

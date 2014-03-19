@@ -47,11 +47,19 @@ public class EmulatorClient {
 
   protected ContentResponse putSimple(final HttpEntry rule, final Collection<HttpEntry> responseEntries) throws JsonProcessingException,
     InterruptedException, TimeoutException, ExecutionException {
-    return newRequest().path(PUT_SIMPLE_PATH)
+      System.out.println("Rule^    :" + jsonMapper.writeValueAsString(rule));
+      System.out.println("Response^:" +jsonMapper.writeValueAsString(responseEntries));
+      System.out.println("---------------------------------------------");
+
+      final ContentResponse response = newRequest().path(PUT_SIMPLE_PATH)
     .method(HttpMethod.PUT)
     .param("rule", jsonMapper.writeValueAsString(rule))
     .param("response", jsonMapper.writeValueAsString(responseEntries))
     .send();
+
+      System.out.println(response.getStatus());
+
+      return response;
   }
   
   public void deleteRule(final long id) throws InterruptedException, TimeoutException, ExecutionException{
