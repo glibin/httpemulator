@@ -50,9 +50,9 @@ public class VkAuthUtils{
     System.out.println("vkCode: " + vkCode);
     System.out.println("vkToken: " + vkToken);
 
-      vkRequestId = "ru.hh.standalone.utils.oauth.VkAuthUtils_loginTest_reqIde1451ebe-ce25-4d7f-803d-3c18994e1bbf";
-      vkCode = "ru.hh.standalone.utils.oauth.VkAuthUtils_loginTest_code0543ff00-2c6e-4c5e-a381-e6275fadc754";
-      vkToken = "ru.hh.standalone.utils.oauth.VkAuthUtils_loginTest_token467bf8ea-5853-4404-9ec9-d7fc0d9507ba";
+      //vkRequestId = "ru.hh.standalone.utils.oauth.VkAuthUtils_loginTest_reqIde1451ebe-ce25-4d7f-803d-3c18994e1bbf";
+      //vkCode = "ru.hh.standalone.utils.oauth.VkAuthUtils_loginTest_code0543ff00-2c6e-4c5e-a381-e6275fadc754";
+      //vkToken = "ru.hh.standalone.utils.oauth.VkAuthUtils_loginTest_token467bf8ea-5853-4404-9ec9-d7fc0d9507ba";
 
     emulatorClient.createSimpleRule()
         .addEQ(AttributeType.COOKIE, UniqueIdentifierUtils.OAUTH_REQUEST_ID_COOKIE, vkRequestId)
@@ -72,7 +72,7 @@ public class VkAuthUtils{
         .addResponseEntry(AttributeType.BODY, null, jsonMapper.writeValueAsString(vkData))
         .save();
 
-      //addCookie("oauth.vk.com", UniqueIdentifierUtils.OAUTH_REQUEST_ID_COOKIE, vkRequestId, true);
+      addCookie("oauth.vk.com", UniqueIdentifierUtils.OAUTH_REQUEST_ID_COOKIE, vkRequestId, true);
 
   }
 }
