@@ -72,7 +72,7 @@ public class VkAuthUtils{
         .addResponseEntry(AttributeType.BODY, null, jsonMapper.writeValueAsString(vkData))
         .save();
 
-      addCookie("oauth.vk.com", UniqueIdentifierUtils.OAUTH_REQUEST_ID_COOKIE, vkRequestId, true);
+      //addCookie("oauth.vk.com", UniqueIdentifierUtils.OAUTH_REQUEST_ID_COOKIE, vkRequestId, true);
 
   }
 }
