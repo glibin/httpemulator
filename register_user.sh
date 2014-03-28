@@ -295,8 +295,6 @@ fi
 	response3='response=[{"id":null,"type":"STATUS","key":null,"value":"200"},{"id":null,"type":"BODY","key":null,"value":"{\"uid\":\"'$uidOK'\",\"birthday\":\"10-02-1985\",\"age\":24,\"first_name\":\"'$first_name'\",\"last_name\":\"'$last_name'\",\"name\":\"MIDDLENAME\",\"locale\":\"ru\",\"gender\":\"'$sex'\",\"has_email\":true,\"location\":{\"countryCode\":\"RU\",\"country\":\"RUSSIAN_FEDERATION\",\"city\":\"Москва\"},\"online\":\"web\",\"photo_id\":\"891584623\",\"pic_1\":\"http%3A%2F%2Fi500.mycdn.me%2FgetImage?photoId=891584623%26photoType=4%26viewToken=rvpZfi6YG671x0TB6ncxjw\",\"pic_2\":\"http%3A%2F%2Fusd1.mycdn.me%2FgetImage?photoId=891584623%26photoType=2%26viewToken=rvpZfi6YG671x0TB6ncxjw\",\"email\":\"'$uidOK'%40odnoklassniki.ru\"}"}]'
 
 	
-	echo $response3	
-
 	idRule1=$(curl -X PUT --data-urlencode "POKERFACE" -d $rule1 -d $response1 $central_http_emulator_create_var -s)
         idRule2=$(curl -X PUT --data-urlencode "POKERFACE" -d $rule2 -d $response2 $central_http_emulator_create_var -s)
         idRule3=$(curl -X PUT --data-urlencode "POKERFACE" -d $rule3 -d $response3 $central_http_emulator_create_var -s)
