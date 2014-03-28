@@ -1,5 +1,5 @@
 #!/bin/bash
-#Creating users Mail.ru, JTB, VK
+#Creating users Mail.ru, JTB, VK, OK
 
 #----------------------------variables---------------------------------
 interactive_var="false" #if we are interactive
@@ -9,7 +9,7 @@ action_var="NULL" #what are we going to do CREATE/DELETE
 system_var="NULL" #in which system we want to create a user
 
 action_array_var=('CREATE' 'DELETE') #avaliable actions
-system_array_var=('mailru' 'tutby' 'vk') #avalibale systems
+system_array_var=('mailru' 'tutby' 'vk' 'ok') #avalibale systems
 
 mailru_or_jtb_login_var=""
 
@@ -20,10 +20,11 @@ central_http_emulator_delete_var="NUULLLLLLL"
 stand_var=$HOSTNAME
 stand_var='mercury' #!!!!DELETE THIS LINE AFTER TESTED
 
+site_var='hh.ru'
 #------------------------MODIFIABLES----------------------
 first_name="" #Make  random name
 last_name=""
-sex="Male" #нихрена не работает, и нет времени разбираться почему
+sex="male" #нихрена не работает, и нет времени разбираться почему
 bdate="14.03.1955"
 
 #--------------------------parsing options-----------------------------
@@ -150,21 +151,21 @@ fi
 	vkRequestId="VKREQUESTID"$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)"VKREQUESTID" #NOTE THIS ONE IS USED AS COOkIE VALUE TO ID a USER
 	vkCode="VKCODE"$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)"VKCODE"
 	vkToken="VKTOKEN"$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)"VKTOKEN"
-	uid="1"$(cat /dev/urandom | tr -dc '0-9' | fold -w 10 | head -n 1) #11 digits starts with 1
+	uidVK="1"$(cat /dev/urandom | tr -dc '0-9' | fold -w 10 | head -n 1) #11 digits starts with 1
 
 	#MODIFY THIS TO ALTER USER IMPORT DATA-------------------!!!!!!!!!!
 	if [[ "$first_name" == "" ]]
 	then
-		first_name=$(cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 64 | head -n 1)
+		first_name=$(cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 12 | head -n 1)
 	fi
-	if [[ "$first_name" == "" ]]
+	if [[ "$last_name" == "" ]]
 	then
-		last_name=$(cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 64 | head -n 1)
+		last_name=$(cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 12 | head -n 1)
 	fi
 	
 
 	#stand and cite
-	site_var='hh.ru' #NOTE ----LOOP FOR ALL THE SITES???????
+	#site_var='hh.ru' #NOTE ----LOOP FOR ALL THE SITES???????
 
 	#-------------first request params for VK----------------------
 	rule1='rule={"id":null,"type":"COOKIE","key":"OAUTH-REQUEST-ID","value":"'$vkRequestId'"}'
@@ -172,11 +173,11 @@ fi
 
 	#-------------second request params for VK
 	rule2='rule={"id":null,"type":"PARAMETER","key":"code","value":"'$vkCode'"}'
-	response2='response=[{"id":null,"type":"STATUS","key":null,"value":"200"},{"id":null,"type":"BODY","key":null,"value":"{\"access_token\":\"'$vkToken'\",\"user_id\":'$uid'}"}]'
+	response2='response=[{"id":null,"type":"STATUS","key":null,"value":"200"},{"id":null,"type":"BODY","key":null,"value":"{\"access_token\":\"'$vkToken'\",\"user_id\":'$uidVK'}"}]'
 
 	#-------------third request params for VK
 	rule3='rule={"id":null,"type":"PARAMETER","key":"access_token","value":"'$vkToken'"}'
-	response3='response=[{"id":null,"type":"STATUS","key":null,"value":"200"},{"id":null,"type":"BODY","key":null,"value":"{\"response\":{\"user\":[{\"uid\":\"'$uid'\",\"first_name\":\"'$first_name'\",\"last_name\":\"'$last_name'\",\"sex\":\"'$sex'\",\"bdate\":\"'$bdate'\",\"city\":\"1386\",\"country\":\"1\",\"personal\":{\"langs\":[\"Русский\",\"Английский\"]},\"universities\":[{\"id\":\"239\",\"country\":\"1\",\"city\":\"1386\",\"name\":\"БГУ\",\"faculty\":\"959\",\"faculty_name\":\"Факультетприкладныхисскуств\",\"chair\":\"18134\",\"chair_name\":\"Изобразительноеисскуство\",\"graduation\":\"2010\",\"education_form\":\"Дневноеотделение\",\"education_status\":\"Выпускникспециалист\"}],\"fullName\":\"LnbdjfidjeicagcihcFnbdjfidjeicagbiag\"}],\"countries\":[{\"cid\":\"1\",\"name\":\"Россия\"}],\"cities\":[{\"cid\":\"1386\",\"name\":\"Москва\"}]},\"firstNameUser\":\"'$first_name'\",\"lastNameUser\":\"'$last_name'\",\"fullNameUser\":\"'$first_name$last_name'\",\"universityNameUser\":\"БГУ\",\"facultyUniversityNameUser\":\"Факультетприкладныхисскуств\",\"cityLocalityNameUser\":\"Москва\",\"birthDayUser\":\"10.02.1990\",\"sexUser\":\"Мужской\",\"languagesUser\":[\"Русский\",\"Английский\"]}"}]'
+	response3='response=[{"id":null,"type":"STATUS","key":null,"value":"200"},{"id":null,"type":"BODY","key":null,"value":"{\"response\":{\"user\":[{\"uid\":\"'$uidVK'\",\"first_name\":\"'$first_name'\",\"last_name\":\"'$last_name'\",\"sex\":\"'$sex'\",\"bdate\":\"'$bdate'\",\"city\":\"1386\",\"country\":\"1\",\"personal\":{\"langs\":[\"Русский\",\"Английский\"]},\"universities\":[{\"id\":\"239\",\"country\":\"1\",\"city\":\"1386\",\"name\":\"БГУ\",\"faculty\":\"959\",\"faculty_name\":\"Факультетприкладныхисскуств\",\"chair\":\"18134\",\"chair_name\":\"Изобразительноеисскуство\",\"graduation\":\"2010\",\"education_form\":\"Дневноеотделение\",\"education_status\":\"Выпускникспециалист\"}],\"fullName\":\"LnbdjfidjeicagcihcFnbdjfidjeicagbiag\"}],\"countries\":[{\"cid\":\"1\",\"name\":\"Россия\"}],\"cities\":[{\"cid\":\"1386\",\"name\":\"Москва\"}]},\"firstNameUser\":\"'$first_name'\",\"lastNameUser\":\"'$last_name'\",\"fullNameUser\":\"'$first_name$last_name'\",\"universityNameUser\":\"БГУ\",\"facultyUniversityNameUser\":\"Факультетприкладныхисскуств\",\"cityLocalityNameUser\":\"Москва\",\"birthDayUser\":\"10.02.1990\",\"sexUser\":\"Мужской\",\"languagesUser\":[\"Русский\",\"Английский\"]}"}]'
 	
 		
 	idRule1=$(curl -X PUT --data-urlencode "POKERFACE" -d $rule1 -d $response1 $central_http_emulator_create_var -s)
@@ -197,7 +198,7 @@ fi
 		echo -e " 3)\e[1;33m Переходим на сайт\e[1;34m $site_var\e[1;33m стенда\e[1;34m $stand_var\e[1;33m, жмем кнопку\e[1;34m Вконтакте\e[1;33m. (для другихъ сайтов не будет работать - если комуто надо могу доделать)                   "
 		echo -e "    Логин и пароль вводить не надо, аутентификация происходит по куке     \e[1;31m "
 		echo -e " 4) \e[1;33mTTL у созданных правил 10 часов                                      \e[1;31m "
-		echo -e " 5)\e[1;33m VK ID созданного пользователя:\e[1;34m $uid\e[1;0m "
+		echo -e " 5)\e[1;33m VK ID созданного пользователя:\e[1;34m $uidVK\e[1;0m "
 		echo "                                                                                   "
 		echo -e "\e[1;32m*****************************************************************************************************************************************************\e[1;0m"
 		echo "                                                                                   "
@@ -256,7 +257,84 @@ fi
                 echo -e "\e[1;31mИспользуйте опцию \e[1;35m-l\e[1;31m чтобы указать желаемый логин!\e[1;0m"
         fi
    fi
-   #---------------------------JTB CREATION ENDS HERE---------------------------	
+   #---------------------------JTB CREATION ENDS HERE---------------------------
+
+   #--------------------------CREATE ODNOGLAZZNIKI user--------------------------
+   if [[ "$system_var" == "ok" ]]
+   then
+	#generating IDs to id our requests
+	okRequestId="OKREQUESTID"$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)"OKREQUESTID" #NOTE THIS ONE IS USED AS COOkIE VALUE TO ID a USER
+        okCode="OKCODE"$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)"OKCODE"
+        okToken="OKTOKEN"$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 64 | head -n 1)"OKTOKEN"
+        uidOK="1"$(cat /dev/urandom | tr -dc '0-9' | fold -w 10 | head -n 1) #11 digits starts with 1
+
+	#MODIFY THIS TO ALTER USER IMPORT DATA-------------------!!!!!!!!!!
+        if [[ "$first_name" == "" ]]
+        then
+                first_name=$(cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 12 | head -n 1)
+		#echo $first_name
+        fi
+    
+        if [[ "$last_name" == "" ]]
+        then
+                last_name=$(cat /dev/urandom | tr -dc 'a-zA-Z' | fold -w 12 | head -n 1)
+		#echo $last_name
+        fi
+
+
+	#------rule1 OK-------
+	rule1='rule={"id":null,"type":"COOKIE","key":"OAUTH-REQUEST-ID","value":"'$okRequestId'"}'
+	response1='response=[{"id":null,"type":"STATUS","key":null,"value":"302"},{"id":null,"type":"HEADER","key":"Location","value":"http://hhid.'$stand_var'.pyn.ru/oauth2/code?reg=http%3A%2F%2F'$site_var'.'$stand_var'.pyn.ru%2Foauth%2Fcallback%3Freg%3Doauth2%26fail=http%3A%2F%2F'$site_var'.'$stand_var'.pyn.ru%2Foauth%2Fcallback%26login=http%3A%2F%2F'$site_var'.'$stand_var'.pyn.ru%2Foauth%2Fcallback%3Furl%3D'$site_var'.'$stand_var'.pyn.ru%26system=OK%26mergeOAuth=false%26code='$okCode'%26error=%26error_description="}]'
+
+        #---rule2 OK----
+	rule2='rule={"id":null,"type":"PARAMETER","key":"code","value":"'$okCode'"}'
+	response2='response=[{"id":null,"type":"STATUS","key":null,"value":"200"},{"id":null,"type":"BODY","key":null,"value":"{\"access_token\":\"'$okToken'\",\"user_id\":'$uidOK'}"}]'
+  
+
+	rule3='rule={"id":null,"type":"PARAMETER","key":"access_token","value":"'$okToken'"}'
+	response3='response=[{"id":null,"type":"STATUS","key":null,"value":"200"},{"id":null,"type":"BODY","key":null,"value":"{\"uid\":\"'$uidOK'\",\"birthday\":\"10-02-1985\",\"age\":24,\"first_name\":\"'$first_name'\",\"last_name\":\"'$last_name'\",\"name\":\"MIDDLENAME\",\"locale\":\"ru\",\"gender\":\"'$sex'\",\"has_email\":true,\"location\":{\"countryCode\":\"RU\",\"country\":\"RUSSIAN_FEDERATION\",\"city\":\"Москва\"},\"online\":\"web\",\"photo_id\":\"891584623\",\"pic_1\":\"http%3A%2F%2Fi500.mycdn.me%2FgetImage?photoId=891584623%26photoType=4%26viewToken=rvpZfi6YG671x0TB6ncxjw\",\"pic_2\":\"http%3A%2F%2Fusd1.mycdn.me%2FgetImage?photoId=891584623%26photoType=2%26viewToken=rvpZfi6YG671x0TB6ncxjw\",\"email\":\"'$uidOK'%40odnoklassniki.ru\"}"}]'
+
+	
+	echo $response3	
+
+	idRule1=$(curl -X PUT --data-urlencode "POKERFACE" -d $rule1 -d $response1 $central_http_emulator_create_var -s)
+        idRule2=$(curl -X PUT --data-urlencode "POKERFACE" -d $rule2 -d $response2 $central_http_emulator_create_var -s)
+        idRule3=$(curl -X PUT --data-urlencode "POKERFACE" -d $rule3 -d $response3 $central_http_emulator_create_var -s)
+
+        #check if the value returned is an integer  AND CONDITION DOES NOT WORK !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+        if [ $idRule1 -eq $idRule1 2> /dev/null ] && [ $idRule1 -eq $idRule1 2> /dev/null ] && [ $idRule1 -eq $idRule1 2> /dev/null ]
+        then
+                echo -e "\e[1;32m*****************************************************************************************************************************************************"
+                echo -e "                        Юзер\e[1;34m Одноклассники\e[1;32m успешно создан                             \e[1;0m "
+                echo -e "\e[1;31m Ваши дальнейшие шаги:                                                             "
+                echo -e " 1)\e[1;33m Меняем хосты на тестовом стенде и на машине где будет запускаться браузер      "
+                echo -e "    так чтобы \e[1;34mapi.odnoklassniki.ru, odnoklassniki.ru, www.odnoklassniki.ru\e[1;33m резолвились     "
+                echo -e "    на машину где поднят http_emulator\e[1;31m                                             " 
+                echo -e " 2)\e[1;33m Преходим в браузере на\e[1;34m http://odnoklassniki.ru\e[1;33m (страница будет пустая) и проставляем куку  "
+                echo -e "    key:\"\e[1;34mOAUTH-REQUEST-ID\e[1;33m\", value:\"\e[1;34m$okRequestId\e[1;33m\". (удобно использовать Edit This Cookie)\e[1;31m   "
+                echo -e " 3)\e[1;33m Переходим на сайт\e[1;34m $site_var\e[1;33m стенда\e[1;34m $stand_var\e[1;33m, жмем кнопку\e[1;34m Одноклассники\e[1;33m. (для другихъ сайтов не будет работать - если комуто надо могу доделать)                   "
+                echo -e "    Логин и пароль вводить не надо, аутентификация происходит по куке     \e[1;31m "
+                echo -e " 4) \e[1;33mTTL у созданных правил 10 часов                                      \e[1;31m "
+                echo -e " 5)\e[1;33m OK ID созданного пользователя:\e[1;34m $uidOK\e[1;0m "
+                echo "                                                                                   "
+                echo -e "\e[1;32m*****************************************************************************************************************************************************\e[1;0m"
+                echo "                                                                                   "
+                echo -e "\e[1;33m На http_emilator успешно созданны следующие правила:\e[1;34m $idRule1, $idRule2, $idRule3 "
+                echo -e "\e[1;33m Данные айдишники нужны для дальнейшего удаления правил из эмулятора.   \e[1;0m           "
+                echo "                                                                                   "
+                echo -e "\e[1;32m*****************************************************************************************************************************************************\e[1;0m"
+        else
+                echo -e "\e[1;31mОШИБКА ЮЗЕР НЕ СОЗДАН - ВСЕ ПОГИБЛО, ВСЕ ПРОПАЛО.... ПРОВЕРЬТЕ КОРРЕКТНОСТЬ URL\e[1;0m"
+                echo $idRule1
+                echo $idRule2
+                echo $idRule3
+                echo $(curl $response3 $central_http_emulator_create_var -v)
+        fi
+
+
+
+   fi
+   #--------------------------ODNOGLAZZNIKI CREATION ENDS HERE-------------------
 
 #----------------------------------Creation---------------------------------------
 
