@@ -8,12 +8,12 @@ import ru.hh.http.emulator.client.entity.AttributeType;
 import ru.hh.standalone.utils.oauth.ok_social_entity.OkData;
 
 /**
- * User: alexandrdeshkevich
+ * Created by marefyev on 3/31/14.
  */
 public class OkAuthUtils {
-    private final String okRequestId = UniqueIdentifierUtils.generateRequestId(getClass(), "loginTest");
-    private final String okCode = UniqueIdentifierUtils.generateOAuthCode(getClass(), "loginTest");
-    private final String okToken = UniqueIdentifierUtils.generateOAuthToken(getClass(), "loginTest");
+    private String okRequestId;
+    private String okCode;
+    private String okToken;
 
 
     private ObjectMapper jsonMapper = new ObjectMapper();
@@ -31,12 +31,12 @@ public class OkAuthUtils {
     public void LoginOk(OkData okData, String sUrlRedirect) throws Exception {
         String okUserId = okData.getUser().getUid();
         emulatorClient = new EmulatorClient(this.http_emulator_host);
-        //driver.addCookie("odnoklassniki.ru", UniqueIdentifierUtils.OAUTH_REQUEST_ID_COOKIE, okRequestId, false);
+
 
 
 
         emulatorClient.createSimpleRule()
-                .addEQ(AttributeType.COOKIE, UniqueIdentifierUtils.OAUTH_REQUEST_ID_COOKIE, okRequestId)
+                .addEQ(AttributeType.COOKIE, "OAUTH-REQUEST-ID", okRequestId)
                 .addResponseEntry(AttributeType.STATUS, null, Integer.toString(HttpStatus.SC_MOVED_TEMPORARILY))
                 .addResponseEntry(AttributeType.HEADER, "Location",
                         OAuthUtils.buildOAuthRedirrectURL(sUrlRedirect, sUrlRedirect, "OK", false, okCode, "", "", hhid_public_url))
@@ -53,6 +53,6 @@ public class OkAuthUtils {
                 .addResponseEntry(AttributeType.BODY, null, jsonMapper.writeValueAsString(okData.getUser()))
                 .save();
 
-        //driver.openHomePage();
+
     }
 }

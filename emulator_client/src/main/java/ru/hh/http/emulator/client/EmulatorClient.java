@@ -47,8 +47,8 @@ public class EmulatorClient {
 
   protected ContentResponse putSimple(final HttpEntry rule, final Collection<HttpEntry> responseEntries) throws JsonProcessingException,
     InterruptedException, TimeoutException, ExecutionException {
-      System.out.println("Rule^    :" + jsonMapper.writeValueAsString(rule));
-      System.out.println("Response^:" +jsonMapper.writeValueAsString(responseEntries));
+      System.out.println("Rule^    :" + jsonMapper.writeValueAsString(rule));//TODO DELETE
+      System.out.println("Response^:" + jsonMapper.writeValueAsString(responseEntries));
       System.out.println("---------------------------------------------");
 
       final ContentResponse response = newRequest().path(PUT_SIMPLE_PATH)
@@ -56,8 +56,6 @@ public class EmulatorClient {
     .param("rule", jsonMapper.writeValueAsString(rule))
     .param("response", jsonMapper.writeValueAsString(responseEntries))
     .send();
-
-      System.out.println(response.getStatus());
 
       return response;
   }
@@ -80,5 +78,9 @@ public class EmulatorClient {
 	    	    .param("response", jsonMapper.writeValueAsString(responseEntries))
 	    	    .send();
   }
-  
+
+
+  public void stopClient() throws Exception {
+      this.client.stop();
+  }
 }

@@ -7,7 +7,7 @@ import org.joda.time.DateMidnight;
 import java.text.SimpleDateFormat;
 
 /**
- * User: alexandrdeshkevich
+ * Created by marefyev on 3/31/14.
  */
 public class OkUser {
     private static long lastTimeStamp = System.currentTimeMillis();

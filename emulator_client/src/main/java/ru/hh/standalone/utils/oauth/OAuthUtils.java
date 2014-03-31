@@ -51,14 +51,5 @@ public class OAuthUtils {
     return sb.toString();
   }
 
-  public static String buildVKUserDataResponse(
-      final String uid, final String firstName, final String lastName, final int sex, final String birthDate) {
-    // {"response":{"user":[{"uid":1594988,"first_name":"Сергей","last_name":"Чернаткин","sex":2,"bdate":"31.10.1984","city":"1386","country":"1","home_phone":"+7","home_town":"","personal":{"langs":["Русский","English"]},"universities":[{"id":239,"country":1,"city":1386,"name":"НИТУ МИСиС","faculty":959,"faculty_name":"Институт физико-химии материалов","chair":18134,"chair_name":"Металловедение и термическая обработка металлов","graduation":2007,"education_form":"Дневное отделение","education_status":"Выпускник (специалист)"}]}],"countries":[{"cid":1,"name":"Россия"}],"cities":[{"cid":"1386","name":"Сергиев Посад"}]}}
 
-    final String response =
-      "{\"response\":{\"user\":[{\"uid\":" + uid + ",\"first_name\":\"" + firstName + "\",\"last_name\":\"" + lastName + "\",\"sex\":" + sex
-      + ",\"bdate\":\"" + birthDate + "\"}]}}";
-
-    return response;
-  }
 }

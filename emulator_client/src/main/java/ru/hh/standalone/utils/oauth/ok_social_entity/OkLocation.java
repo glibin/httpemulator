@@ -3,11 +3,7 @@ package ru.hh.standalone.utils.oauth.ok_social_entity;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
- * Created with IntelliJ IDEA.
- * User: alexandrdeshkevich
- * Date: 1/23/14
- * Time: 10:17 AM
- * To change this template use File | Settings | File Templates.
+ * Created by marefyev on 3/31/14.
  */
 public class OkLocation {
 

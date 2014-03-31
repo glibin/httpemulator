@@ -5,7 +5,7 @@ import org.codehaus.jackson.annotate.JsonProperty;
 import java.util.ArrayList;
 
 /**
- * User: dsobol
+ * Created by marefyev on 3/31/14.
  */
 public class VkResponse {
   @JsonProperty

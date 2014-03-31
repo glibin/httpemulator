@@ -3,7 +3,7 @@ package ru.hh.standalone.utils.oauth.vk_social_entity;
 import org.codehaus.jackson.annotate.JsonProperty;
 
 /**
- * User: dsobol
+ * Created by marefyev on 3/31/14.
  */
 public class VkCity {
   @JsonProperty

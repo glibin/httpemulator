@@ -6,7 +6,7 @@ import ru.hh.standalone.utils.oauth.*;
 import java.util.Random;
 
 /**
- * User: max
+ * Created by marefyev on 3/31/14.
  */
 public class Odnoglazniki {
 

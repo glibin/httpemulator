@@ -1,7 +1,7 @@
 package ru.hh.standalone.utils.oauth.ok_social_entity;
 
 /**
- * User: alexandrdeshkevich
+ * Created by marefyev on 3/31/14.
  */
 public class OkData {
 

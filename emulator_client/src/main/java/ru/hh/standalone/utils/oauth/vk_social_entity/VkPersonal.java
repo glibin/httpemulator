@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 /**
- * User: dsobol
+ * Created by marefyev on 3/31/14.
  */
 public class VkPersonal {
   @JsonProperty
