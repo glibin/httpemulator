@@ -9,24 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
- * Created by marefyev on 3/31/14.
+ * Created by marefyev on 4/1/14.
  */
-public class LogicServlet extends HttpServlet {
-
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        response.setContentType("text/html");
-        response.setStatus(HttpServletResponse.SC_OK);//TODO JSON
-        response.getWriter().println("<html>\n" +
-                "<body>\n" +
-                "<h1>" + "HEllo Max MAX" + "</h1>" +
-                "<form method=\"post\" action=\"created\">\n" +
-                "<input type=\"text\" name=\"username\" />\n" +
-                "<input type=\"password\" name=\"password\" />\n" +
-                "<input type=\"submit\" />\n" +
-                "</form>\n" +
-                "</body>\n" +
-                "</html>");
-    }
+public class CreateUser extends HttpServlet {
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         // TODO Auto-generated method stub

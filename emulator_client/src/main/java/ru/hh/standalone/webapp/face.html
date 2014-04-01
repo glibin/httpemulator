@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title> Create user VK, OK, Mail.ru, Tut.by </title>
+    <STYLE type="text/css">
+        html {height: 50%;}
+
+        H2.myclass { text-align: center; background-color:#CCCC99; border-top-right-radius: 4px; border-top-left-radius:
+        4px;}
+
+        body { background-color: #F6F4F0 ; height:100%;}
+
+        #bodyWrapper { color: black; background-color: #ffffff; width: 760px; margin: 0 auto; box-shadow: 0px 0px 20px
+        3px #d3d3d3; border-radius: 4px; text-align: center; height:100%}
+
+        /*Показываем радио боксы соц.сетей*/
+        #socialNetworks { margin: 10px; border-style: dashed; padding: 10px; border-width: 1px; border-radius: 4px;
+        background-color: #F0F0F0; border-color:#98bf21; }
+
+        /*Показываем чек боксы сайтов*/
+        #sites { margin: 10px; border-style: dashed; padding: 10px; border-width: 1px; border-radius: 4px;
+        background-color: #F0F0F0; border-color:#98bf21; display:none;}
+
+        /*Показываем кнопку сабмит*/
+        #submitButton {display:none;}
+
+        /*имя стэнда для которого будет создан юзер*/
+        #serverName { margin: 10px; border-style: dashed; padding: 10px; border-width: 1px; border-radius: 4px;
+        background-color: #F0F0F0; border-color:#98bf21; display:none;}
+
+        /*Воодим расширенный набор данных*/
+        #extended { margin: 10px; border-style: dashed; padding: 10px; border-width: 1px; border-radius: 4px;
+        background-color: #F0F0F0; border-color:#98bf21; display:none;}
+    </STYLE>
+</head>
+<body>
+<script>
+function disableEnterKey(e, elementCheck, elementEnable)
+{
+
+     var key;
+     if(window.event)
+          key = window.event.keyCode;     //IE
+     else
+          key = e.which;     //firefox
+
+     if(key == 13){
+          return false;
+          }
+     else{
+          checkFieldSize(elementCheck, elementEnable);
+          return true;
+          }
+
+
+}
+
+function checkFieldSize(id, enable){
+
+    var elm = document.getElementById(id)
+    var length = elm.value.length;
+
+    if (length > 2 ){
+        document.getElementById(enable).style.display = "block";
+        ;}
+    else{
+        document.getElementById(enable).style.display = "none";
+        }
+}
+
+
+
+function makeBlockVisible(checkbox, id)
+{
+    var elm = document.getElementById(id)
+    elm.style.display = checkbox.checked? "block":"none"
+}
+
+
+</script>
+
+<div id="bodyWrapper">
+    <h2 class="myclass">Create users VK, OK</h2>
+
+    <form id="mainForm" name="input" action="" method="post">
+
+        <div id="socialNetworks">
+            <b>Select which user you want to create:</b><br>
+            <input type="radio" name="social" value="VK" onclick="makeBlockVisible(this, 'sites')">VK ||
+            <input type="radio" name="social" value="OK" onclick="makeBlockVisible(this, 'sites')">OK ||
+            <input type="radio" name="social" value="FB" disabled="disabled">FB ||
+            <input type="radio" name="social" value="LI" disabled="disabled">LI ||
+            <input type="radio" name="social" value="GP" disabled="disabled">GP ||
+            <input type="radio" name="social" value="RMR" disabled="disabled">RMR ||
+            <input type="radio" name="social" value="JTB" disabled="disabled">JTB
+        </div>
+        <div id="sites">
+            <b>Select which site you want to affect:</b><br>
+            <input type="radio" name="site" value="hhru" onclick="makeBlockVisible(this, 'serverName')">hh.ru ||
+            <input type="radio" name="site" value="hhua" onclick="makeBlockVisible(this, 'serverName')">hh.ua ||
+            <input type="radio" name="site" value="hhkz" onclick="makeBlockVisible(this, 'serverName')">hh.kz
+        </div>
+
+        <div id="serverName">
+            <b>Enter your server name (e.g. mercury, ts20, panda):</b><br>
+            <input id="serverText" type="text" name="serverName" size="30" onkeyup="return disableEnterKey(event, 'serverText', 'extended')">
+        </div>
+
+        <div id="extended">
+            <b>Do you want to enter additional data (e.g. first name, last name):</b><br>
+            <input type="radio" name="extended" value="yes">Yes ||
+            <input type="radio" name="extended" value="no" hecked="checked">No
+        </div>
+
+        <div id="submitButton">
+            <input type="submit" value="Submit">
+        </div>
+    </form>
+
+
+</div>
+</body>
+</html>

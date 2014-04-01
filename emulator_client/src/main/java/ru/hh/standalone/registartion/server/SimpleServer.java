@@ -14,10 +14,11 @@ public class SimpleServer {
         Server server = new Server(7171);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        context.setContextPath("/reguser");
-        server.setHandler(context);
+        context.setContextPath("/");
 
-        context.addServlet(new ServletHolder(new LogicServlet()),"/*");
+        server.setHandler(context);
+        context.addServlet(new ServletHolder(new StartPage()),"/reguser");
+        context.addServlet(new ServletHolder(new CreateUser()),"/reguser/post/createuser");
 
 
         server.start();
