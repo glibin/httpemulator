@@ -34,8 +34,6 @@ public class StartPage extends HttpServlet {
 
         //System.out.println(everything);
 
-
-
         response.getWriter().println(everything);
     }
 

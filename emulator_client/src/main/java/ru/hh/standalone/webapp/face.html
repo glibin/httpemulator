@@ -5,14 +5,14 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title> Create user VK, OK, Mail.ru, Tut.by </title>
     <STYLE type="text/css">
-        html {height: 50%;}
+        html {height: 850px%;}
 
         H2.myclass { text-align: center; background-color:#CCCC99; border-top-right-radius: 4px; border-top-left-radius:
         4px;}
 
         body { background-color: #F6F4F0 ; height:100%;}
 
-        #bodyWrapper { color: black; background-color: #ffffff; width: 760px; margin: 0 auto; box-shadow: 0px 0px 20px
+        #createUserForm { color: black; background-color: #ffffff; width: 760px; margin: 0 auto; box-shadow: 0px 0px 20px
         3px #d3d3d3; border-radius: 4px; text-align: center; height:100%}
 
         /*Показываем радио боксы соц.сетей*/
@@ -33,6 +33,23 @@
         /*Воодим расширенный набор данных*/
         #extended { margin: 10px; border-style: dashed; padding: 10px; border-width: 1px; border-radius: 4px;
         background-color: #F0F0F0; border-color:#98bf21; display:none;}
+
+        /*Вводим HTTP коды возвращаемые правилами*/
+        #httpCodes { margin: 10px; border-style: dashed; padding: 10px; border-width: 1px; border-radius: 4px;
+        background-color: #F0F0F0; border-color:#98bf21; display:none;}
+
+        /*URL эмулятора*/
+        #emulatorURL { margin: 10px; border-style: dashed; padding: 10px; border-width: 1px; border-radius: 4px;
+        background-color: #F0F0F0; border-color:#98bf21; display:none;}
+
+        /*Имя и фамилия*/
+        #names { margin: 10px; border-style: dashed; padding: 10px; border-width: 1px; border-radius: 4px;
+        background-color: #F0F0F0; border-color:#98bf21; display:none;}
+
+        /*Стили кнопки*/
+        #createUserButton {background: #CCCC99; padding: 10px 10px; vertical-align: middle; }
+        #createUserButton:hover { background: #CCCC29;  }
+
     </STYLE>
 </head>
 <body>
@@ -78,16 +95,32 @@ function makeBlockVisible(checkbox, id)
     elm.style.display = checkbox.checked? "block":"none"
 }
 
+function makeExtendedBlockVisible()
+{
+    if(document.getElementById('extN').checked){
+        document.getElementById('submitButton').style.display = "block";
+        document.getElementById('httpCodes').style.display = "none";
+        document.getElementById('emulatorURL').style.display = "none";
+        document.getElementById('names').style.display = "none";
+    }
+    if(document.getElementById('extY').checked){
+        document.getElementById('submitButton').style.display = "block";
+        document.getElementById('httpCodes').style.display = "block";
+        document.getElementById('emulatorURL').style.display = "block";
+        document.getElementById('names').style.display = "block";
+    }
+
+}
 
 </script>
 
-<div id="bodyWrapper">
+<div id="createUserForm">
     <h2 class="myclass">Create users VK, OK</h2>
 
     <form id="mainForm" name="input" action="" method="post">
 
         <div id="socialNetworks">
-            <b>Select which user you want to create:</b><br>
+            <b>Select a social network:</b><br>
             <input type="radio" name="social" value="VK" onclick="makeBlockVisible(this, 'sites')">VK ||
             <input type="radio" name="social" value="OK" onclick="makeBlockVisible(this, 'sites')">OK ||
             <input type="radio" name="social" value="FB" disabled="disabled">FB ||
@@ -105,17 +138,36 @@ function makeBlockVisible(checkbox, id)
 
         <div id="serverName">
             <b>Enter your server name (e.g. mercury, ts20, panda):</b><br>
-            <input id="serverText" type="text" name="serverName" size="30" onkeyup="return disableEnterKey(event, 'serverText', 'extended')">
+            <input id="serverText" type="text" name="serverName" size="30"
+                   onkeyup="return disableEnterKey(event, 'serverText', 'extended')">
         </div>
 
         <div id="extended">
-            <b>Do you want to enter additional data (e.g. first name, last name):</b><br>
-            <input type="radio" name="extended" value="yes">Yes ||
-            <input type="radio" name="extended" value="no" hecked="checked">No
+            <b>Do you want to enter additional data (e.g. first name, last name, return codes):</b><br>
+            <input id="extY" type="radio" name="extended" value="yes" onclick="makeExtendedBlockVisible()">Yes ||
+            <input id="extN" type="radio" name="extended" value="no" onclick="makeExtendedBlockVisible()">No
+        </div>
+
+        <div id="httpCodes">
+            <b>Enter HTTP codes returned by the emulator(keep the default values if you don't know what it is about):</b><br>
+            <b>Response code rule1: </b><input id="rule1Response" type="text" name="rule1Response" size="10" value="302"><br>
+            <b>Response code rule2: </b><input id="rule2Response" type="text" name="rule2Response" size="10" value="200"><br>
+            <b>Response code rule3: </b><input id="rule3Response" type="text" name="rule3Response" size="10" value="200">
+        </div>
+
+        <div id="emulatorURL">
+            <b>Enter http_emulator URL (e.g. http://jenkins.pyn.ru:18880, leave blank if you use the default one):</b><br>
+            <input id="emulURL" type="text" name="emulURL" size="30">
+        </div>
+
+        <div id="names">
+            <b>Enter first and last name of a user (keep blank if you don't give a damn):</b><br>
+            <b>First name: </b><input id="firstname" type="text" name="firstname" size="40" ><br>
+            <b>Last name: </b><input id="lastname" type="text" name="lastname" size="40">
         </div>
 
         <div id="submitButton">
-            <input type="submit" value="Submit">
+            <input id="createUserButton" type="submit" value="Create user">
         </div>
     </form>
 
