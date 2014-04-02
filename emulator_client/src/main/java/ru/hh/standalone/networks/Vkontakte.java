@@ -1,4 +1,4 @@
-package ru.hh.standalone.registration;
+package ru.hh.standalone.networks;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;

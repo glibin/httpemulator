@@ -1,4 +1,4 @@
-package ru.hh.standalone.registration;
+package ru.hh.standalone.networks;
 
 import ru.hh.standalone.utils.oauth.ok_social_entity.*;
 import ru.hh.standalone.utils.oauth.*;

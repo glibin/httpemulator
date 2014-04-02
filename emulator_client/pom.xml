@@ -87,7 +87,7 @@
             <configuration>
                 <archive>
                     <manifest>
-                        <mainClass>ru.hh.standalone.registartion.server.SimpleServer</mainClass>
+                        <mainClass>ru.hh.standalone.server.SimpleServer</mainClass>
                     </manifest>
                 </archive>
             </configuration>

@@ -12,8 +12,12 @@
 
         body { background-color: #F6F4F0 ; height:100%;}
 
-        #createUserForm { color: black; background-color: #ffffff; width: 760px; margin: 0 auto; box-shadow: 0px 0px 20px
+        #createUserForm { color: black; background-color: #ffffff; width: 760px; margin: 0 auto; box-shadow: 0px 0px
+        20px
         3px #d3d3d3; border-radius: 4px; text-align: center; height:100%}
+
+        #createdUserData { margin: 10px; border-style: dashed; padding: 10px; border-width: 1px; border-radius: 4px;
+        background-color: #F0F0F0; border-color:#98bf21; display:none;}
 
         /*Показываем радио боксы соц.сетей*/
         #socialNetworks { margin: 10px; border-style: dashed; padding: 10px; border-width: 1px; border-radius: 4px;
@@ -48,15 +52,29 @@
 
         /*Стили кнопки*/
         #createUserButton {background: #CCCC99; padding: 10px 10px; vertical-align: middle; }
-        #createUserButton:hover { background: #CCCC29;  }
+        #createUserButton:hover { background: #CCCC29; }
 
+        /*Сообщения о создании или о не создании юзера*/
+        .crd {display:none; margin: 10px;}
+
+        /*параграфы сообщения*/
+        li {text-align: left; margin: 10px;}
+
+        #successMessage {text-align: left;}
+
+        #cSuccess {color:#006633}
+        #cFailure {color:#CC0000}
+
+        .blue {color:#000066}
     </STYLE>
-</head>
-<body>
-<script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
+    </script>
+
+
+
+    <script>
 function disableEnterKey(e, elementCheck, elementEnable)
 {
-
      var key;
      if(window.event)
           key = window.event.keyCode;     //IE
@@ -70,8 +88,6 @@ function disableEnterKey(e, elementCheck, elementEnable)
           checkFieldSize(elementCheck, elementEnable);
           return true;
           }
-
-
 }
 
 function checkFieldSize(id, enable){
@@ -112,12 +128,40 @@ function makeExtendedBlockVisible()
 
 }
 
-</script>
+//submit form
+function submitDetailsForm() {
+    $( "#mainForm" ).submit(function( event ) {
+        // Stop form from submitting normally
+        event.preventDefault();
 
+        // Send the data using post
+        var posting = $.post( "reguser/post/createuser", $( "#mainForm" ).serialize() );
+
+        // Put the results in a div
+        posting.done(function( posting ) {
+            document.getElementById("createdUserData").style.display = "block";
+            document.getElementById("mainForm").style.display = "none";
+            if(posting.STATUS == 200){
+                document.getElementById("cSuccess").style.display = "block";
+                document.getElementById("successMessage").style.display = "block";
+
+                var text = 'Your next steps are:' + '<ul>' + posting.step1 + posting.step2 + posting.step3 + posting.step4 + posting.step5 + '</ul>';
+                document.getElementById("successMessage").innerHTML = text;
+
+            }
+
+    });
+    });
+}
+
+
+</script>
+</head>
+<body>
 <div id="createUserForm">
     <h2 class="myclass">Create users VK, OK</h2>
 
-    <form id="mainForm" name="input" action="" method="post">
+    <form id="mainForm" action="/">
 
         <div id="socialNetworks">
             <b>Select a social network:</b><br>
@@ -131,9 +175,9 @@ function makeExtendedBlockVisible()
         </div>
         <div id="sites">
             <b>Select which site you want to affect:</b><br>
-            <input type="radio" name="site" value="hhru" onclick="makeBlockVisible(this, 'serverName')">hh.ru ||
-            <input type="radio" name="site" value="hhua" onclick="makeBlockVisible(this, 'serverName')">hh.ua ||
-            <input type="radio" name="site" value="hhkz" onclick="makeBlockVisible(this, 'serverName')">hh.kz
+            <input type="radio" name="site" value="hh.ru" onclick="makeBlockVisible(this, 'serverName')">hh.ru ||
+            <input type="radio" name="site" value="hh.ua" onclick="makeBlockVisible(this, 'serverName')">hh.ua ||
+            <input type="radio" name="site" value="hh.kz" onclick="makeBlockVisible(this, 'serverName')">hh.kz
         </div>
 
         <div id="serverName">
@@ -149,29 +193,43 @@ function makeExtendedBlockVisible()
         </div>
 
         <div id="httpCodes">
-            <b>Enter HTTP codes returned by the emulator(keep the default values if you don't know what it is about):</b><br>
-            <b>Response code rule1: </b><input id="rule1Response" type="text" name="rule1Response" size="10" value="302"><br>
-            <b>Response code rule2: </b><input id="rule2Response" type="text" name="rule2Response" size="10" value="200"><br>
-            <b>Response code rule3: </b><input id="rule3Response" type="text" name="rule3Response" size="10" value="200">
+            <b>Enter HTTP codes returned by the emulator(keep the default values if you don't know what it is
+                about):</b><br>
+            <b>Response code rule1: </b><input id="rule1Response" type="text" name="rule1Response" size="10"
+                                               value="302"><br>
+            <b>Response code rule2: </b><input id="rule2Response" type="text" name="rule2Response" size="10"
+                                               value="200"><br>
+            <b>Response code rule3: </b><input id="rule3Response" type="text" name="rule3Response" size="10"
+                                               value="200">
         </div>
 
         <div id="emulatorURL">
-            <b>Enter http_emulator URL (e.g. http://jenkins.pyn.ru:18880, leave blank if you use the default one):</b><br>
+            <b>Enter http_emulator URL (e.g. http://jenkins.pyn.ru:18880, leave blank if you use the default
+                one):</b><br>
             <input id="emulURL" type="text" name="emulURL" size="30">
         </div>
 
         <div id="names">
             <b>Enter first and last name of a user (keep blank if you don't give a damn):</b><br>
-            <b>First name: </b><input id="firstname" type="text" name="firstname" size="40" ><br>
+            <b>First name: </b><input id="firstname" type="text" name="firstname" size="40"><br>
             <b>Last name: </b><input id="lastname" type="text" name="lastname" size="40">
         </div>
 
         <div id="submitButton">
-            <input id="createUserButton" type="submit" value="Create user">
+            <input id="createUserButton" type="submit" value="Create user" onclick="submitDetailsForm()">
         </div>
     </form>
 
+    <div id="createdUserData">
+        <div id="cSuccess" class="crd"><b>User was successfully created!</b></div>
+        <div id="cFailure" class="crd"><b>User Creation has failed!</b></div>
 
+        <div id="successMessage" class="crd"></div>
+        <div id="failureMessage" class="crd">Something went terribly wrong!</div>
+
+    </div>
 </div>
+
+
 </body>
 </html>

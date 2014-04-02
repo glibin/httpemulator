@@ -1,4 +1,4 @@
-package ru.hh.standalone.registartion.server;
+package ru.hh.standalone.server;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletContextHandler;
