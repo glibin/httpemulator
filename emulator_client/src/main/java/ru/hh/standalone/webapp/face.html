@@ -149,6 +149,10 @@ function submitDetailsForm() {
                 document.getElementById("successMessage").innerHTML = text;
 
             }
+            if(posting.STATUS == 500){
+                document.getElementById("cFailure").style.display = "block";
+                document.getElementById("failureMessage").style.display = "block";
+            }
 
     });
     });

@@ -19,7 +19,7 @@ public class OAuthUtils {
       .append(URLEncoder.encode(callbackPage, "UTF-8"))
       .append('&')
       .append("login=")
-      .append(URLEncoder.encode(callbackPage + "?url=" + URLEncoder.encode(currentPage, "UTF-8"), "UTF-8"))
+      .append(URLEncoder.encode(callbackPage + "?url=" + currentPage, "UTF-8"))
       .append('&')
       .append("system=")
       .append(system)

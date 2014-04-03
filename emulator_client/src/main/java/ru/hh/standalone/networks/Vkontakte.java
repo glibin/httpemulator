@@ -48,7 +48,7 @@ public class Vkontakte {
         this.vkPersonal = new VkPersonal();
         this.vkUserId = "1" + getNumber(10);
         this.http_emulator_host = http_emulator;
-        this.openthisPage = this.testHost + "/applicant/negotiations";
+        this.openthisPage = "applicant/negotiations";
         this.hhid_public_url = "http://hhid." + testHostNameOnly + ".pyn.ru/";
         this.userCreated = false;
         setIDs();
@@ -80,6 +80,7 @@ public class Vkontakte {
     public void loginVk() throws Exception {
         VkData vkData = new VkData(this.vkUserId, this.vkPersonal);  // создаем данные пользователя вконтаке (sUid - id пользователя), vkPersonal - данные о языках
         emulatorClient = new EmulatorClient(this.http_emulator_host);
+
 
         try {
             this.ruleID1 = emulatorClient.createSimpleRule()

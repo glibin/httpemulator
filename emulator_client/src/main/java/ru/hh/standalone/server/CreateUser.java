@@ -76,7 +76,10 @@ public class CreateUser extends HttpServlet {
                 }
 
 
+            }else if(social.equals("OK")){
+
             }
+
             String send = responseJSON.toString();
             if (send.equals("")) {
                 send = "{\"STATUS\":500,\"error\":\""+errorMessage+"\"}";
