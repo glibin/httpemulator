@@ -28,6 +28,8 @@ public class Vkontakte {
     private String hhid_public_url;
     private ObjectMapper jsonMapper = new ObjectMapper();
     private EmulatorClient emulatorClient;
+    private VkData vkData;
+    private String codes[] = null;
 
 
     private String vkRequestId;
@@ -45,6 +47,7 @@ public class Vkontakte {
     public Vkontakte(String site, String testHostNameOnly, String http_emulator) {
         this.site = site;
         this.testHost = this.site + "." + testHostNameOnly + ".pyn.ru";
+
         this.vkPersonal = new VkPersonal();
         this.vkUserId = "1" + getNumber(10);
         this.http_emulator_host = http_emulator;
@@ -52,8 +55,16 @@ public class Vkontakte {
         this.hhid_public_url = "http://hhid." + testHostNameOnly + ".pyn.ru/";
         this.userCreated = false;
         setIDs();
+        vkData = new VkData(this.vkUserId, this.vkPersonal);  // создаем данные пользователя вконтаке (sUid - id пользователя), vkPersonal - данные о языках
     }
 
+    public Vkontakte(String site, String testHostNameOnly, String http_emulator, String first_name, String lastName, String codes[]) {
+        this(site, testHostNameOnly, http_emulator);
+        this.vkData.setFirstNameUser(first_name).setLastNameUser(lastName);
+        this.codes = codes;
+    }
+
+    //for test purposes only
     public static void main(String args[]) throws Exception {
         Vkontakte vkontakt = new Vkontakte("hh.ru", "mercury", "http://jenkins.pyn.ru:18880");
         vkontakt.loginVk();
@@ -78,27 +89,27 @@ public class Vkontakte {
 
 
     public void loginVk() throws Exception {
-        VkData vkData = new VkData(this.vkUserId, this.vkPersonal);  // создаем данные пользователя вконтаке (sUid - id пользователя), vkPersonal - данные о языках
+
         emulatorClient = new EmulatorClient(this.http_emulator_host);
 
 
         try {
             this.ruleID1 = emulatorClient.createSimpleRule()
                     .addEQ(AttributeType.COOKIE, this.cookieName, vkRequestId)
-                    .addResponseEntry(AttributeType.STATUS, null, Integer.toString(HttpStatus.SC_MOVED_TEMPORARILY))
+                    .addResponseEntry(AttributeType.STATUS, null, codes ==null ? Integer.toString(HttpStatus.SC_MOVED_TEMPORARILY): codes[0])
                     .addResponseEntry(AttributeType.HEADER, "Location", OAuthUtils.buildOAuthRedirrectURL(this.testHost, this.openthisPage, "VK", false, vkCode, "", "", this.hhid_public_url))
                     .save();
 
             this.ruleID2 = emulatorClient.createSimpleRule()
                     .addEQ(AttributeType.PARAMETER, "code", vkCode)
-                    .addResponseEntry(AttributeType.STATUS, null, Integer.toString(HttpStatus.SC_OK))
+                    .addResponseEntry(AttributeType.STATUS, null, codes ==null ? Integer.toString(HttpStatus.SC_OK): codes[1])
                     .addResponseEntry(AttributeType.BODY, null, OAuthUtils.buildAccessTokenResponse(vkToken, this.vkUserId))
                     .save();
 
             this.ruleID3 = emulatorClient.createSimpleRule()
                     .addEQ(AttributeType.PARAMETER, "access_token", vkToken)
-                    .addResponseEntry(AttributeType.STATUS, null, Integer.toString(HttpStatus.SC_OK))
-                    .addResponseEntry(AttributeType.BODY, null, jsonMapper.writeValueAsString(vkData))
+                    .addResponseEntry(AttributeType.STATUS, null, codes ==null ? Integer.toString(HttpStatus.SC_OK): codes[2])
+                    .addResponseEntry(AttributeType.BODY, null, jsonMapper.writeValueAsString(this.vkData))
                     .save();
 
             setIfTheUserCreated(true);

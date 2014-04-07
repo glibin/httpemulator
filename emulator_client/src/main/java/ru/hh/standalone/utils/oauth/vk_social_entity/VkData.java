@@ -35,8 +35,18 @@ public class VkData {
     return this.response.getUser().get(0).getFirst_name();
   }
 
+  public VkData setFirstNameUser(String _name){
+      this.response.getUser().get(0).setFirst_name(_name);
+      return this;
+  }
+
   public String getLastNameUser() {
     return this.response.getUser().get(0).getLast_name();
+  }
+
+  public VkData setLastNameUser(String _name){
+     this.response.getUser().get(0).setLast_name(_name);
+      return this;
   }
 
   public String getFullNameUser() {
