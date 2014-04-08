@@ -11,7 +11,9 @@ public class SimpleServer {
 
     public static void main(String args[]) throws Exception{
 
-        Server server = new Server(7171);
+        String portSTR = args.length != 0 ? args[0] : null;
+
+        Server server = new Server(portSTR != null && portSTR.length() > 3? Integer.parseInt(portSTR): 7171);
 
         ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
         context.setContextPath("/");
