@@ -123,6 +123,49 @@ public class CreateUser extends HttpServlet {
                     e.printStackTrace();
                     errorMessage = e.getMessage();
                 }
+            }else if (social.equals("FB")) {
+
+                FaceBook face;
+
+                if (extended.equals("yes")) {
+                    face = new FaceBook(site, serverName, emulURL, firstname.equals("")? "ВВедиИмяУрод":firstname, lastname.equals("")? "ФАМИЛИЯ" : lastname,
+                            new String[]{rule1Response, rule2Response, rule3Response});
+                } else {
+                    face = new FaceBook(site, serverName, emulURL);
+                }
+
+
+                try {
+                    face.loginFb();
+
+                    String step1 = "\"step1\":\"<li>Меняем хосты на тестовом стенде и на машине где будет запускаться браузер " +
+                            "так чтобы <b class='blue'>facebook.com</b>, <b class='blue'>www.facebook.com</b>, <b class='blue'> www.facebook.com</b>" +
+                            " резолвились " +
+                            "на машину где поднят http_emulator</li>\"";
+
+                    String step2 = "\"step2\":\"<li>Преходим в браузере на <b class='blue'>https://www.facebook.com</b> (страница будет пустая) " +
+                            " и проставляем куку. key:'<b class='blue'>OAUTH-REQUEST-ID</b>'," +
+                            " value:'<b class='blue'>" +
+                            face.getFbRequestId() + "</b>', ставим галочку <b class='blue'>secure</b>. (удобно использовать Edit This Cookie)</li>\"";
+
+                    String step3 = "\"step3\":\"<li>Переходим на сайт <b class='blue'>" + site + "</b> стенда <b class='blue'>" + serverName +
+                            "</b>, жмем кнопку <b class='blue'>Фейсбук</b>. (для другихъ сайтов не будет работать)." +
+                            " Логин и пароль вводить не надо, аутентификация происходит по куке. </li>\"";
+
+                    String step4 = "\"step4\":\"<li>TTL у созданных правил 10 часов</li>\"";
+                    String step5 = "\"step5\":\"<li>FB ID созданного пользователя: <b class='blue'>" + face.getFBID() + "</b></li>\"";
+                    String ruleIDs = "\"ruleIDs\":\"" + face.getRuleIDs() + "\"";
+
+                    String status = "\"STATUS\":200";
+
+                    responseJSON.append("{").append(step1).append(",").append(step2).append(",").append(step3).append(",")
+                            .append(step4).append(",").append(step5).append(",").append(ruleIDs).append(",").append(status).append("}");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    errorMessage = e.getMessage();
+                }
+
+
             }
 
             String send = responseJSON.toString();

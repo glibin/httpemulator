@@ -163,7 +163,7 @@ function submitDetailsForm() {
 </head>
 <body>
 <div id="createUserForm">
-    <h2 class="myclass">Create users VK, OK</h2>
+    <h2 class="myclass">Create users VK, OK, FB</h2>
 
     <form id="mainForm" action="/">
 
@@ -171,7 +171,7 @@ function submitDetailsForm() {
             <b>Select a social network:</b><br>
             <input type="radio" name="social" value="VK" onclick="makeBlockVisible(this, 'sites')">VK ||
             <input type="radio" name="social" value="OK" onclick="makeBlockVisible(this, 'sites')">OK ||
-            <input type="radio" name="social" value="FB" disabled="disabled">FB ||
+            <input type="radio" name="social" value="FB" onclick="makeBlockVisible(this, 'sites')">FB ||
             <input type="radio" name="social" value="LI" disabled="disabled">LI ||
             <input type="radio" name="social" value="GP" disabled="disabled">GP ||
             <input type="radio" name="social" value="RMR" disabled="disabled">RMR ||

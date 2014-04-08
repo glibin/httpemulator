@@ -51,5 +51,13 @@ public class OAuthUtils {
     return sb.toString();
   }
 
+    public static String fbAccessToken(final String token) {
+        final StringBuilder sb = new StringBuilder("access_token=").append(token);
+
+
+        return sb.toString();
+    }
+
+
 
 }
